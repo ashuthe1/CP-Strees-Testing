@@ -1,13 +1,16 @@
 #!/bin/bash
 
+# Create exec directory for executables if it doesn't exist
+mkdir -p exec
+
 # Compile all necessary programs with error checking
-g++ solution.cpp -o solution || { echo "Failed to compile solution.cpp"; exit 1; }
-g++ naive.cpp -o naive || { echo "Failed to compile naive.cpp"; exit 1; }
-g++ test_gen.cpp -o test_gen || { echo "Failed to compile test_gen.cpp"; exit 1; }
-g++ checker.cpp -o checker || { echo "Failed to compile checker.cpp"; exit 1; }
+g++ solution.cpp -o exec/solution || { echo "Failed to compile solution.cpp"; exit 1; }
+g++ naive.cpp -o exec/naive || { echo "Failed to compile naive.cpp"; exit 1; }
+g++ test_gen.cpp -o exec/test_gen || { echo "Failed to compile test_gen.cpp"; exit 1; }
+g++ checker.cpp -o exec/checker || { echo "Failed to compile checker.cpp"; exit 1; }
 
 # Generate test cases
-./test_gen || { echo "Failed to generate test cases"; exit 1; }
+exec/test_gen || { echo "Failed to generate test cases"; exit 1; }
 
 # Create logs directory and subdirectories for checker logs and test logs if they don't exist
 mkdir -p ../logs/checker_logs
@@ -31,13 +34,13 @@ for input in ../tests/input/*.txt; do
     > "$checker_log"
 
     # Generate expected output using naive solution
-    ./naive < "$input" > "$expected_output" || { echo "Failed to generate expected output"; exit 1; }
+    exec/naive < "$input" > "$expected_output" || { echo "Failed to generate expected output"; exit 1; }
 
     # Run solution and save actual output
-    ./solution < "$input" > "$actual_output" || { echo "Failed to generate actual output"; exit 1; }
+    exec/solution < "$input" > "$actual_output" || { echo "Failed to generate actual output"; exit 1; }
 
     # Compare outputs and log details
-    if ./checker "$actual_output" "$expected_output" | tee -a "$checker_log" | grep -q "Mismatch"; then
+    if exec/checker "$actual_output" "$expected_output" | tee -a "$checker_log" | grep -q "Mismatch"; then
         # Log details for a failing test case
         echo "Test $test_name: FAILED" >> "$log_file"
         echo "Input:" >> "$log_file"

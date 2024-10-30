@@ -1,11 +1,11 @@
 Test test_5: PASSED
 Input:
-6
-11 468 649 747 479 490 
+1
+615 
 
 Expected Output:
-747
-11
+615
+615
 Actual Output:
-747
-11
+615
+615
