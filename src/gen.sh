@@ -2,7 +2,7 @@
 
 # Compile all necessary programs with error checking
 g++ solution.cpp -o exec/solution || { echo "Failed to compile solution.cpp"; exit 1; }
-g++ naive.cpp -o exec/naive || { echo "Failed to compile naive.cpp"; exit 1; }
+g++ bruteforce.cpp -o exec/bruteforce || { echo "Failed to compile bruteforce.cpp"; exit 1; }
 g++ test_gen.cpp -o exec/test_gen || { echo "Failed to compile test_gen.cpp"; exit 1; }
 g++ checker.cpp -o exec/checker || { echo "Failed to compile checker.cpp"; exit 1; }
 
@@ -45,8 +45,8 @@ for input in ../tests/input/*.txt; do
     > "$log_file"
     > "$checker_log"
 
-    # Generate expected output using naive solution
-    ./exec/naive < "$input" > "$expected_output" || { echo "Failed to generate expected output"; exit 1; }
+    # Generate expected output using bruteforce solution
+    ./exec/bruteforce < "$input" > "$expected_output" || { echo "Failed to generate expected output"; exit 1; }
 
     # Run solution and save actual output
     ./exec/solution < "$input" > "$actual_output" || { echo "Failed to generate actual output"; exit 1; }

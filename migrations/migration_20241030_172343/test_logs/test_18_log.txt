@@ -1,0 +1,15 @@
+Test test_18: FAILED
+Input:
+4
+-7 8 -2 -7 
+3
+5 7
+5 10
+1 4
+Expected Output:
+Hii
+4
+
+Actual Output:
+Hi
+4

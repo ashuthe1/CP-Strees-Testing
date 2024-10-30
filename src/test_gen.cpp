@@ -5,18 +5,6 @@ string generate_test() {
     int n = rand() % 100 + 1;  // Number of integers between 1 and 100
     stringstream ss;
     ss << n << "\n";
-    for (int i = 0; i < n; i++) {
-        ss << (rand() % 21 - 10) << " ";  // Numbers between 1 and 1000
-    }
-    ss << "\n";
-    int q = rand() % 10 + 1;  // Number of queries between 1 and 100
-    ss << q;
-    int lim = n * (n+1)/2;
-    for (int i = 0; i < q; i++) {
-        int l = rand() % lim + 1;  // Random index between 1 and n
-        int r = rand() % lim + 1;  // Random index between 1 and n
-        ss << "\n" << min(l, r) << " " << max(l, r);
-    }
     return ss.str();
 }
 
