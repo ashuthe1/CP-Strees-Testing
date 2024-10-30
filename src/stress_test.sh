@@ -6,9 +6,12 @@ g++ naive.cpp -o exec/naive || { echo "Failed to compile naive.cpp"; exit 1; }
 g++ test_gen.cpp -o exec/test_gen || { echo "Failed to compile test_gen.cpp"; exit 1; }
 g++ checker.cpp -o exec/checker || { echo "Failed to compile checker.cpp"; exit 1; }
 
-# Clean up previous logs and tests
+# Clean up previous logs and test files while preserving .gitkeep files
 echo "Cleaning up previous logs and test files..."
-rm -rf ../logs/* ../tests/input/* ../tests/actual_output/* ../tests/expected_output/*
+find ../logs -type f ! -name '.gitkeep' -delete
+find ../tests/input -type f ! -name '.gitkeep' -delete
+find ../tests/actual_output -type f ! -name '.gitkeep' -delete
+find ../tests/expected_output -type f ! -name '.gitkeep' -delete
 echo "Cleanup complete."
 
 # Default number of test cases
