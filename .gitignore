@@ -1,7 +1,13 @@
-# Ignore logs and tests directories
-logs/*
-tests/*
+# Ignore logs and tests sub-directories
+logs/checker_logs/*
+logs/test_logs/*
+
+tests/input/*
+tests/actual_output/*
+tests/expected_output/*
+
 src/exec/*
+
 # Exclude .gitkeep files from being ignored
 !logs/.gitkeep
 !logs/checker_logs/.gitkeep
