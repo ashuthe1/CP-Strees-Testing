@@ -1,27 +1,4 @@
-# Ignore all files in the exec directory (contains compiled executables)
-./src/exec
-
-# Ignore all files in tests directory except the folder structure itself
-./tests/**/*
-!./tests/
-!./tests/input/
-!./tests/actual_output/
-!./tests/expected_output/
-
-# Ignore all files in logs directory except the folder structure itself
-./logs/**/*
-!./logs/
-!./logs/checker_logs/
-!./logs/test_logs/
-
-# Ignore compiled binary files and temporary files
-*.o
-*.out
-*.exe
-*.tmp
-
-# Ignore editor and OS-specific files
-*.swp
-*~
-.DS_Store
-Thumbs.db
+# Ignore logs and tests directories
+logs/
+tests/
+src/exec/
