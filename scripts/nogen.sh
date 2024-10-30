@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Compile necessary programs with error checking
-g++ solution.cpp -o exec/solution || { echo "Failed to compile solution.cpp"; exit 1; }
-g++ checker.cpp -o exec/checker || { echo "Failed to compile checker.cpp"; exit 1; }
+g++ ../src/solution.cpp -o ../src/exec/solution || { echo "Failed to compile solution.cpp"; exit 1; }
+g++ ../src/checker.cpp -o ../src/exec/checker || { echo "Failed to compile checker.cpp"; exit 1; }
 
 # Create logs directory and subdirectories for checker logs and test logs if they don't exist
 mkdir -p ../logs/checker_logs
@@ -30,10 +30,10 @@ for input in ../tests/input/*.txt; do
     > "$checker_log"
 
     # Run the solution and save actual output
-    ./exec/solution < "$input" > "$actual_output" || { echo "Failed to generate actual output"; exit 1; }
+    ../src/exec/solution < "$input" > "$actual_output" || { echo "Failed to generate actual output"; exit 1; }
 
     # Compare outputs and log details
-    if ./exec/checker "$actual_output" "$expected_output" | tee -a "$checker_log" | grep -q "Mismatch"; then
+    if ../src/exec/checker "$actual_output" "$expected_output" | tee -a "$checker_log" | grep -q "Mismatch"; then
         # Log details for a failing test case
         echo "Test $test_name: FAILED" >> "$log_file"
         echo "Input:" >> "$log_file"

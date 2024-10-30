@@ -1,22 +1,18 @@
 #!/bin/bash
 
-# Compile solution, validator, and test generator with error checking
-g++ solution.cpp -o exec/solution || { echo "Failed to compile solution.cpp"; exit 1; }
-g++ anypossible_validator.cpp -o exec/validator || { echo "Failed to compile validator.cpp"; exit 1; }
-g++ test_gen.cpp -o exec/test_gen || { echo "Failed to compile test_gen.cpp"; exit 1; }
+# Compile solution and validator with error checking
+g++ ../src/solution.cpp -o ../src/exec/solution || { echo "Failed to compile solution.cpp"; exit 1; }
+g++ ../src/anypossible_validator.cpp -o ../src/exec/validator || { echo "Failed to compile validator.cpp"; exit 1; }
 
-# Clean up previous logs and test files while preserving .gitkeep files
-echo "Cleaning up previous logs and test files..."
+# Clean up previous logs while preserving .gitkeep files
+echo "Cleaning up previous logs..."
 find ../logs -type f ! -name '.gitkeep' -delete
-find ../tests/input -type f ! -name '.gitkeep' -delete
 find ../tests/actual_output -type f ! -name '.gitkeep' -delete
 echo "Cleanup complete."
 
-# Default number of test cases
-num_tests=${1:-10}  # Use the first argument if provided, otherwise default to 10
-
-# Generate test cases with the specified number
-./exec/test_gen "$num_tests" || { echo "Failed to generate test cases"; exit 1; }
+# Directory setup for logs
+mkdir -p ../logs/checker_logs
+mkdir -p ../logs/test_logs
 
 # Define color codes for terminal output
 GREEN='\033[0;32m'
@@ -27,11 +23,7 @@ NC='\033[0m'  # No Color
 passed_tests=0
 failed_tests=0
 
-# Directory setup for logs
-mkdir -p ../logs/checker_logs
-mkdir -p ../logs/test_logs
-
-# Run through each generated test case and validate output
+# Run through each previously generated test case and validate output
 for input in ../tests/input/*.txt; do
     test_name=$(basename "$input" .txt)
     actual_output="../tests/actual_output/${test_name}_actual.txt"
@@ -43,10 +35,10 @@ for input in ../tests/input/*.txt; do
     > "$test_log"
 
     # Run solution and save actual output
-    ./exec/solution < "$input" > "$actual_output" || { echo "Failed to generate actual output"; exit 1; }
+    ../src/exec/solution < "$input" > "$actual_output" || { echo "Failed to generate actual output"; exit 1; }
 
     # Validate output with anypossible_validator
-    if ./exec/validator "$input" "$actual_output" | tee -a "$checker_log" | grep -q "Valid"; then
+    if ../src/exec/validator "$input" "$actual_output" | tee -a "$checker_log" | grep -q "Valid"; then
         # Log success details
         echo "Test $test_name: PASSED" >> "$test_log"
         echo "Input:" >> "$test_log"

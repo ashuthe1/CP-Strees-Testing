@@ -10,30 +10,15 @@ using namespace std;
 
 #define int long long
 const int N = 1e6+10;
+const int INF = 1e16;
+const int MOD = 1e9+7;
 
-int n;
 void AshutoshGautam() {
-    int q; cin >> n;
-    vector<int> v(n+1, 0), b;
-    for(int i = 1; i <= n; i++) {
-        cin >> v[i];
-    }
-    b.push_back(0);
-    for(int i = 1; i <= n; i++) {
-        int curSum = 0;
-        for(int j = i; j <= n; j++) {
-            curSum += v[j];
-            b.push_back(curSum);
-        }
-    }
-    cin >> q;
-    while(q--) {
-        int l, r; cin >> l >> r;
-        int ans = 0;
-        for(int i = l; i <= r; i++) ans += b[i];
-        cout << ans << "\n";
-    }
+    int x; cin >> x;
+    cout << 2 << "\n";
+    cout << 1 << " " << x-1 << "\n";
 }
+
 signed main() {
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
     int testCases = 1;
