@@ -9,8 +9,15 @@ g++ naive.cpp -o exec/naive || { echo "Failed to compile naive.cpp"; exit 1; }
 g++ test_gen.cpp -o exec/test_gen || { echo "Failed to compile test_gen.cpp"; exit 1; }
 g++ checker.cpp -o exec/checker || { echo "Failed to compile checker.cpp"; exit 1; }
 
-# Generate test cases
-exec/test_gen || { echo "Failed to generate test cases"; exit 1; }
+# Get the optional argument for the number of test cases
+num_tests=${1:-}  # Use the first argument if provided, otherwise leave empty
+
+# Generate test cases with optional number of test cases
+if [[ -n "$num_tests" ]]; then
+    exec/test_gen "$num_tests" || { echo "Failed to generate test cases"; exit 1; }
+else
+    exec/test_gen || { echo "Failed to generate test cases"; exit 1; }
+fi
 
 # Create logs directory and subdirectories for checker logs and test logs if they don't exist
 mkdir -p ../logs/checker_logs

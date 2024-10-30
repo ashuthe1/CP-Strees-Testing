@@ -1,0 +1,11 @@
+Test test_87: PASSED
+Input:
+18
+986 127 479 654 811 203 895 233 236 288 446 466 40 706 812 140 689 844 
+
+Expected Output:
+986
+40
+Actual Output:
+986
+40

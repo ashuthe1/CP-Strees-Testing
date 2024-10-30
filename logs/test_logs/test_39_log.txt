@@ -1,0 +1,11 @@
+Test test_39: PASSED
+Input:
+8
+691 457 486 485 883 411 741 783 
+
+Expected Output:
+883
+411
+Actual Output:
+883
+411

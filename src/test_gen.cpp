@@ -12,12 +12,23 @@ string generate_test() {
     return ss.str();
 }
 
-int main() {
+int main(int argc, char* argv[]) {
     srand(time(0));
-    for (int i = 0; i < 10; i++) {
+
+    // Default number of test cases
+    int num_tests = 10;
+
+    // Update num_tests if an argument is provided
+    if (argc > 1) {
+        num_tests = stoi(argv[1]);
+    }
+
+    // Generate the specified number of test cases
+    for (int i = 0; i < num_tests; i++) {
         ofstream outfile("../tests/input/test_" + to_string(i) + ".txt");
         outfile << generate_test();
         outfile.close();
     }
+
     return 0;
 }

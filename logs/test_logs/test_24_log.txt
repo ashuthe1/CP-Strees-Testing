@@ -1,0 +1,11 @@
+Test test_24: PASSED
+Input:
+12
+945 833 317 460 792 697 475 865 388 236 890 239 
+
+Expected Output:
+945
+236
+Actual Output:
+945
+236

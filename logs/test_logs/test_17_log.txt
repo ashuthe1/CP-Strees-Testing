@@ -1,0 +1,11 @@
+Test test_17: PASSED
+Input:
+5
+460 542 986 70 86 
+
+Expected Output:
+986
+70
+Actual Output:
+986
+70

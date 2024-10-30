@@ -1,0 +1,11 @@
+Test test_12: FAILED
+Input:
+18
+240 59 823 269 573 392 437 548 913 561 73 74 842 178 739 361 985 5 
+
+Expected Output:
+985
+5
+Actual Output:
+985
+59

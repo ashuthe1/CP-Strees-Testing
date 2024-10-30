@@ -1,0 +1,11 @@
+Test test_30: PASSED
+Input:
+12
+411 243 529 910 543 651 649 175 787 696 477 196 
+
+Expected Output:
+910
+175
+Actual Output:
+910
+175
