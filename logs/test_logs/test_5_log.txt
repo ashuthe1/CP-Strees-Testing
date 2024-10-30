@@ -1,11 +1,11 @@
 Test test_5: PASSED
 Input:
-1
-615 
+3
+805 570 576 
 
 Expected Output:
-615
-615
+805
+570
 Actual Output:
-615
-615
+805
+570
