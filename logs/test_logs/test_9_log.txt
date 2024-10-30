@@ -1,0 +1,11 @@
+Test test_9: PASSED
+Input:
+13
+675 174 711 730 17 851 930 432 176 798 936 603 70 
+
+Expected Output:
+936
+17
+Actual Output:
+936
+17

@@ -1,0 +1,11 @@
+Test test_7: PASSED
+Input:
+3
+458 82 582 
+
+Expected Output:
+582
+82
+Actual Output:
+582
+82
