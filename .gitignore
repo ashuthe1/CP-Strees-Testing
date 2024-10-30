@@ -17,3 +17,4 @@ src/exec/*
 !tests/actual_output/.gitkeep
 !tests/expected_output/.gitkeep
 !src/exec/.gitkeep
+!migrations/.gitkeep
