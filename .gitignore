@@ -2,6 +2,7 @@
 logs/*
 tests/*
 src/exec/*
+# Exclude .gitkeep files from being ignored
 !logs/.gitkeep
 !logs/checker_logs/.gitkeep
 !logs/test_logs/.gitkeep
