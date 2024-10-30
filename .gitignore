@@ -1,4 +1,11 @@
 # Ignore logs and tests directories
-logs/
-tests/
-src/exec/
+logs/*
+tests/*
+src/exec/*
+!logs/.gitkeep
+!logs/checker_logs/.gitkeep
+!logs/test_logs/.gitkeep
+!tests/input/.gitkeep
+!tests/actual_output/.gitkeep
+!tests/expected_output/.gitkeep
+!src/exec/.gitkeep
