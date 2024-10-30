@@ -36,14 +36,6 @@ for input in ../tests/input/*.txt; do
     # Run solution and save actual output
     ./solution < "$input" > "$actual_output" || { echo "Failed to generate actual output"; exit 1; }
 
-    # Debug: Print output lengths and contents for comparison
-    echo "Debug Info for Test $test_name:"
-    echo "Expected Output:"
-    cat "$expected_output"
-    echo "Actual Output:"
-    cat "$actual_output"
-    echo ""
-
     # Compare outputs and log details
     if ./checker "$actual_output" "$expected_output" | tee -a "$checker_log" | grep -q "Mismatch"; then
         # Log details for a failing test case
