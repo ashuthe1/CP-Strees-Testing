@@ -19,7 +19,7 @@ void AshutoshGautam() {
         int x;
         cin >> x;
         max_val = max(max_val, x);
-        if(i < n-1) min_val = min(min_val, x);
+        min_val = min(min_val, x);
     }
     cout << max_val << endl;
     cout << min_val<< endl;

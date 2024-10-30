@@ -29,6 +29,10 @@ GREEN='\033[0;32m'
 RED='\033[0;31m'
 NC='\033[0m'  # No Color
 
+# Initialize counters
+passed_tests=0
+failed_tests=0
+
 # Run stress tests
 for input in ../tests/input/*.txt; do
     test_name=$(basename "$input" .txt)
@@ -58,6 +62,9 @@ for input in ../tests/input/*.txt; do
         echo -e "\nActual Output:" >> "$log_file"
         cat "$actual_output" >> "$log_file"
 
+        # Increment failed test counter
+        ((failed_tests++))
+
         # Show "Failed" status in red
         echo -e "Test $test_name: ${RED}Failed${NC}"
     else
@@ -70,7 +77,18 @@ for input in ../tests/input/*.txt; do
         echo -e "\nActual Output:" >> "$log_file"
         cat "$actual_output" >> "$log_file"
 
+        # Increment passed test counter
+        ((passed_tests++))
+
         # Show "Passed" status in green
         echo -e "Test $test_name: ${GREEN}Passed${NC}"
     fi
 done
+
+# Display summary of results
+total_tests=$((passed_tests + failed_tests))
+if [ $failed_tests -gt 0 ]; then
+    echo -e "\n${RED}$failed_tests tests failed out of $total_tests total tests.${NC}"
+else
+    echo -e "\n${GREEN}All test cases passed!${NC}"
+fi
