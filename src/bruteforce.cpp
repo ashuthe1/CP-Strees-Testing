@@ -1,30 +1,78 @@
-// Ashutosh Gautam ツ
 #include <bits/stdc++.h>
 using namespace std;
 
-#ifdef AshutoshOS // It works on my machine.
-#include "../algo/debug.hpp" 
-#else
-#define deb(...)
-#endif
+int n, m, k;
 
-#define int long long
-const int N = 1e6+10;
-const int INF = 1e16;
-const int MOD = 1e9+7;
+/**
+ * @return whether it's possible to construct a
+ * valid ordering with given fixed elements
+ */
+bool check(vector<int> order, vector<int> &hierarchy) {
+    vector<int> cow_to_pos(n, -1);
 
-void AshutoshGautam() {
-    int x; cin >> x;
-    cout << 2 << "\n";
-    cout << 1 << " " << x-1 << "\n";
+    for (int i = 0; i < n; i++) {
+        if (order[i] != -1) { cow_to_pos[order[i]] = i; }
+    }
+
+    int h_idx = 0;
+    for (int i = 0; i < n && h_idx < m; i++) {
+        if (cow_to_pos[hierarchy[h_idx]] != -1) {
+            // we know the next cow has to be in front of it
+
+            if (i > cow_to_pos[hierarchy[h_idx]]) { return false; }
+
+            i = cow_to_pos[hierarchy[h_idx]];
+            h_idx++;
+        } else {
+            while (i < n && order[i] != -1) { i++; }
+
+            // run out of places
+            if (i == n) { return false; }
+
+            order[i] = hierarchy[h_idx];
+            cow_to_pos[hierarchy[h_idx]] = i;
+            h_idx++;
+        }
+    }
+
+    return true;
 }
 
-signed main() {
-    ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
-    int testCases = 1;
-    // cin >> testCases; 
+int main() {
+    // freopen("milkorder.in", "r", stdin);
+    // freopen("milkorder.out", "w", stdout);
+    cin >> n >> m >> k;
 
-    for(int testCase = 1; testCase <= testCases ; testCase++)  
-        AshutoshGautam(); // Ping me for solving any issue ツ
-    return 0;
+    vector<int> hierarchy(m);
+    for (int i = 0; i < m; i++) {
+        cin >> hierarchy[i];
+        hierarchy[i]--;
+    }
+
+    vector<int> order(n, -1);
+
+    for (int i = 0; i < k; i++) {
+        int cow, pos;
+        cin >> cow >> pos;
+
+        order[--pos] = --cow;
+
+        if (cow == 0) {  // already fixed, nothing we can do
+            cout << pos + 1 << endl;
+            return 0;
+        }
+    }
+
+    for (int i = 0; i < n; i++) {
+        // if already fixed, skip
+        if (order[i] == -1) {
+            // try placing cow 1 @ position i
+            order[i] = 0;
+            if (check(order, hierarchy)) {
+                cout << i + 1 << endl;
+                break;
+            }
+            order[i] = -1;
+        }
+    }
 }

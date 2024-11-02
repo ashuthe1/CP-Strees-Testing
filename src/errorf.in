@@ -1,0 +1,9 @@
+Line 73: ans = [7, 3, 7, 5, 7, 7, 7]; fixed = [{3, 1}, {5, 3}]; 
+Line 74: "Yaha" = Yaha; 
+Line 78: i = 2; relOrder[i] = 6; pos = 6; 
+Line 87: relOrder[i] = 6; pos = 6; 
+Line 78: i = 1; relOrder[i] = 5; pos = 5; 
+Line 82: pos = 3; 
+Line 78: i = 0; relOrder[i] = 4; pos = 2; 
+Line 87: relOrder[i] = 4; pos = 2; 
+Line 94: ans = [7, 3, 4, 5, 7, 7, 6]; 

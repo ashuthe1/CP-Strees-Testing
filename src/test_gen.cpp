@@ -2,9 +2,29 @@
 using namespace std;
 
 string generate_test() {
-    int n = rand() % 100 + 1;  // Number of integers between 1 and 100
+    int n = rand() % 6 + 1;  // Number of integers between 1 and 100
+    int m = rand() % (n-1) + 1;
+    int k = rand() % (n-1) + 1;
     stringstream ss;
-    ss << n << "\n";
+    ss << n << " " << m << " "<< k << "\n";
+    unordered_set<int> relOrder;
+    while(relOrder.size() < m) {
+        relOrder.insert(rand()%n + 1);
+    }
+    for(int e: relOrder) ss << e << " ";  
+    ss << endl;
+    set<int> cows, pos;
+    while(cows.size() < k) {
+        cows.insert(rand()%n + 1);
+    }
+    while(pos.size() < k) {
+        pos.insert(rand()%n + 1);
+    }
+    for(int i = 0; i < k; i++) {
+        ss << *cows.begin() << " " << *pos.begin() << endl;
+        cows.erase(cows.begin());
+        pos.erase(pos.begin());
+    }
     return ss.str();
 }
 
