@@ -1,78 +1,61 @@
+// Ashutosh Gautam ツ
 #include <bits/stdc++.h>
 using namespace std;
 
-int n, m, k;
+#ifdef AshutoshOS // It works on my machine.
+#include "../algo/debug.hpp" 
+#else
+#define deb(...)
+#endif
 
-/**
- * @return whether it's possible to construct a
- * valid ordering with given fixed elements
- */
-bool check(vector<int> order, vector<int> &hierarchy) {
-    vector<int> cow_to_pos(n, -1);
+#define int long long
+const int N = 1e6+10;
+const int INF = 1e16;
+const int MOD = 1e9+7;
 
-    for (int i = 0; i < n; i++) {
-        if (order[i] != -1) { cow_to_pos[order[i]] = i; }
+string decToBinary(int n)
+{
+    string ans = "";
+    for (int i = 31; i >= 0; i--) {
+        int k = n >> i;
+        if (k & 1)
+            ans += "1";
+        else
+            ans += "0";
     }
-
-    int h_idx = 0;
-    for (int i = 0; i < n && h_idx < m; i++) {
-        if (cow_to_pos[hierarchy[h_idx]] != -1) {
-            // we know the next cow has to be in front of it
-
-            if (i > cow_to_pos[hierarchy[h_idx]]) { return false; }
-
-            i = cow_to_pos[hierarchy[h_idx]];
-            h_idx++;
-        } else {
-            while (i < n && order[i] != -1) { i++; }
-
-            // run out of places
-            if (i == n) { return false; }
-
-            order[i] = hierarchy[h_idx];
-            cow_to_pos[hierarchy[h_idx]] = i;
-            h_idx++;
+    string hehe = "";
+    bool gotOne = false;
+    for(auto &e: ans) {
+        if(e == '1') gotOne = true;
+        if(gotOne) hehe += e;
+    }
+    return hehe;
+}
+void AshutoshGautam() {
+    int l, r, ans = 0; cin >> l >> r;
+    for(int num = l; num <= r; num++) {
+        string s = decToBinary(num);
+        set<int> st;
+        int cnt = 1;
+        char prev = s[0];
+        s += '&';
+        for(int i = 1; i <= n; i++) {
+            if(s[i] != prev) {
+                mp[cnt]++;
+                cnt = 1;
+            } else cnt++;
         }
+        if(st.size() == 1) ans++;
     }
-
-    return true;
+    cout << ans << "\n";
 }
 
-int main() {
-    // freopen("milkorder.in", "r", stdin);
-    // freopen("milkorder.out", "w", stdout);
-    cin >> n >> m >> k;
+signed main() {
+    ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
+    int testCases = 1;
+    // cin >> testCases; 
 
-    vector<int> hierarchy(m);
-    for (int i = 0; i < m; i++) {
-        cin >> hierarchy[i];
-        hierarchy[i]--;
-    }
-
-    vector<int> order(n, -1);
-
-    for (int i = 0; i < k; i++) {
-        int cow, pos;
-        cin >> cow >> pos;
-
-        order[--pos] = --cow;
-
-        if (cow == 0) {  // already fixed, nothing we can do
-            cout << pos + 1 << endl;
-            return 0;
-        }
-    }
-
-    for (int i = 0; i < n; i++) {
-        // if already fixed, skip
-        if (order[i] == -1) {
-            // try placing cow 1 @ position i
-            order[i] = 0;
-            if (check(order, hierarchy)) {
-                cout << i + 1 << endl;
-                break;
-            }
-            order[i] = -1;
-        }
-    }
+    for(int testCase = 1; testCase <= testCases ; testCase++)  
+        AshutoshGautam(); // Ping me for solving any issue ツ
+    return 0;
 }

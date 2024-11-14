@@ -1,30 +1,13 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+// Function to generate random test cases for the AshutoshGautam function
 string generate_test() {
-    int n = rand() % 6 + 1;  // Number of integers between 1 and 100
-    int m = rand() % (n-1) + 1;
-    int k = rand() % (n-1) + 1;
+    int l = rand() % 1000000000 + 1; // Random l between 1 and 10^9
+    int r = l + rand() % 1000;       // Random r between l and l + 1000 to keep the range small for performance
+
     stringstream ss;
-    ss << n << " " << m << " "<< k << "\n";
-    unordered_set<int> relOrder;
-    while(relOrder.size() < m) {
-        relOrder.insert(rand()%n + 1);
-    }
-    for(int e: relOrder) ss << e << " ";  
-    ss << endl;
-    set<int> cows, pos;
-    while(cows.size() < k) {
-        cows.insert(rand()%n + 1);
-    }
-    while(pos.size() < k) {
-        pos.insert(rand()%n + 1);
-    }
-    for(int i = 0; i < k; i++) {
-        ss << *cows.begin() << " " << *pos.begin() << endl;
-        cows.erase(cows.begin());
-        pos.erase(pos.begin());
-    }
+    ss << l << " " << r << "\n";
     return ss.str();
 }
 
