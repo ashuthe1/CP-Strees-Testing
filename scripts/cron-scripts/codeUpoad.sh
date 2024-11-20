@@ -50,8 +50,11 @@ fi
 # Replace spaces with underscores in the file name
 FILE_NAME="${FILE_NAME// /_}.cpp"
 
+# Create folder structure, removing the file name from the subfolder path
+FOLDER_NAME=$(echo "$SUBFOLDER_PATH" | sed "s|$FILE_NAME$||" | sed 's|/$||')  # Remove file name from subfolder path
+
 # Full path for the folder and file
-FINAL_FOLDER="$TARGET_DIR/$SUBFOLDER_PATH"
+FINAL_FOLDER="$TARGET_DIR/$FOLDER_NAME"
 mkdir -p "$FINAL_FOLDER"
 NEW_FILE_PATH="$FINAL_FOLDER/$FILE_NAME"
 
@@ -62,5 +65,5 @@ cd ..
 
 # Add the new file to git
 git add "."
-git commit -m "Added $FILE_NAME from solution.cpp to $POSSIBLE_FOLDER/$SUBFOLDER_PATH folder"
+git commit -m "Added $FILE_NAME from solution.cpp to $POSSIBLE_FOLDER/$FOLDER_NAME folder"
 git push origin main
