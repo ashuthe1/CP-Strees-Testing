@@ -26,7 +26,7 @@ if [[ -z "$PATH_VALUE" ]]; then
   exit 1
 fi
 
-# Extract possible folder name from the URL (e.g., "cses" from "https://cses.fi")
+# Extract possible folder name from the URL (e.g., "codeforces" from "https://codeforces.com")
 POSSIBLE_FOLDER=$(echo "$PATH_VALUE" | awk -F'/' '{print $3}' | awk -F'.' '{print $1}')
 
 # Check if POSSIBLE_FOLDER matches any folder name in CODE_TRAVEL_DIR
@@ -35,12 +35,8 @@ if [[ ! -d "$TARGET_DIR" ]]; then
   TARGET_DIR="$CODE_TRAVEL_DIR/unspecified"
 fi
 
-# Remove the domain from the path and extract subfolder and file name
-RELATIVE_PATH=$(echo "$PATH_VALUE" | sed -E 's|https?://[^/]+/||')
-
-# Extract subfolder and file name
-SUBFOLDER_PATH=$(echo "$RELATIVE_PATH" | sed 's|/|-|g' | sed 's|-*$||')  # Replace slashes with dashes
-FILE_NAME=$(echo "$RELATIVE_PATH" | awk -F'/' '{print $NF}')  # Extract last part after last slash
+# Extract the file name: Last segment of the path (after the last '/')
+FILE_NAME=$(echo "$PATH_VALUE" | awk -F'/' '{print $NF}')
 
 # Ensure the file name is non-empty
 if [[ -z "$FILE_NAME" ]]; then
@@ -50,8 +46,14 @@ fi
 # Replace spaces with underscores in the file name
 FILE_NAME="${FILE_NAME// /_}.cpp"
 
-# Remove the file name from the subfolder path (create the folder path without the file name)
-FOLDER_NAME=$(echo "$SUBFOLDER_PATH" | sed "s|$FILE_NAME$||" | sed 's|/$||')  # Remove file name from subfolder path
+# Remove the file name from the URL to get the folder path
+RELATIVE_PATH=$(echo "$PATH_VALUE" | sed -E 's|https?://[^/]+/||')
+
+# Remove the file name from the relative path
+SUBFOLDER_PATH=$(echo "$RELATIVE_PATH" | sed "s|/$FILE_NAME$||")
+
+# Replace slashes with dashes for the folder name
+FOLDER_NAME=$(echo "$SUBFOLDER_PATH" | sed 's|/|-|g')
 
 # Full path for the folder and file
 FINAL_FOLDER="$TARGET_DIR/$FOLDER_NAME"
