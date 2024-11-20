@@ -1,4 +1,5 @@
 // Ashutosh Gautam ツ
+// path: https://codeforces.com/contest/2037/problem/B
 // path: https://cses.fi/problemset/task/1072
 // path: https://codeforces.com/contest/2037/problem/B
 
