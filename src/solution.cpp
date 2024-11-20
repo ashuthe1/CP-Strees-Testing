@@ -1,5 +1,11 @@
 // Ashutosh Gautam ツ
+// path: https://cses.fi/problemset/task/1070
 // path: https://codeforces.com/contest/2037/problem/B
+// path: https://atcoder.jp/contests/abc374/tasks/abc374_e
+// path: assesment/contests/abc374/tasks/abc374_e
+// path: https://www.spoj.com/problems/LIS2/
+
+
 #include <bits/stdc++.h>
 using namespace std;
 
