@@ -26,34 +26,38 @@ if [[ -z "$PATH_VALUE" ]]; then
   exit 1
 fi
 
-# Split the path value into directory name and file name based on '/'
-DIR_NAME=$(echo "$PATH_VALUE" | cut -d'/' -f1)
-FILE_NAME=$(echo "$PATH_VALUE" | cut -d'/' -f2)
+# Extract possible folder name from the URL (e.g., "codeforces" from "https://codeforces.com")
+POSSIBLE_FOLDER=$(echo "$PATH_VALUE" | awk -F'/' '{print $3}' | awk -F'.' '{print $1}')
 
-# Ensure both directory name and file name are valid
-if [[ -z "$DIR_NAME" || -z "$FILE_NAME" ]]; then
-  echo "Invalid path value in solution.cpp. Exiting."
-  exit 1
-fi
-
-# Check if DIR_NAME matches any folder name in CODE_TRAVEL_DIR
-TARGET_DIR="$CODE_TRAVEL_DIR/$DIR_NAME"
+# Check if POSSIBLE_FOLDER matches any folder name in CODE_TRAVEL_DIR
+TARGET_DIR="$CODE_TRAVEL_DIR/$POSSIBLE_FOLDER"
 if [[ ! -d "$TARGET_DIR" ]]; then
   TARGET_DIR="$CODE_TRAVEL_DIR/unspecified"
 fi
 
+# Extract the path after the domain
+RELATIVE_PATH=$(echo "$PATH_VALUE" | sed -E 's|https?://[^/]+/||')
+
+# Extract the directory structure (everything before the last '/') and file name (after the last '/')
+SUB_FOLDER=$(dirname "$RELATIVE_PATH")
+FILE_NAME=$(basename "$RELATIVE_PATH")
+
 # Replace spaces with underscores in the file name
 FILE_NAME="${FILE_NAME// /_}.cpp"
 
-# Full path of the new file
-NEW_FILE_PATH="$TARGET_DIR/$FILE_NAME"
+# Create the necessary subfolder structure inside the target directory
+FINAL_FOLDER="$TARGET_DIR/$SUB_FOLDER"
+mkdir -p "$FINAL_FOLDER"
 
-# Create the file in the appropriate directory
+# Full path of the new file
+NEW_FILE_PATH="$FINAL_FOLDER/$FILE_NAME"
+
+# Copy the file to the target directory and subfolder
 cp solution.cpp "$NEW_FILE_PATH"
 
 cd ..
 
 # Add the new file to git
 git add "."
-git commit -m "Added $FILE_NAME from solution.cpp to $DIR_NAME folder"
+git commit -m "Added $FILE_NAME from solution.cpp to $POSSIBLE_FOLDER/$SUB_FOLDER folder"
 git push origin main
