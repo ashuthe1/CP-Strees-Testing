@@ -1,9 +1,5 @@
 // Ashutosh Gautam ツ
-// path: https://assesment/contests/abc374/tasks/abc374_e
-// path: https://atcoder.jp/contests/abc374/tasks/abc374_e
-// path: https://codeforces.com/contest/2037/problem/B/
-// path: https://cses.fi/problemset/task/1072
-// path: https://codeforces.com/contest/2037/problem/B
+// path: https://www.spoj.com/problems/LIS2
 
 #include <bits/stdc++.h>
 using namespace std;
@@ -13,12 +9,6 @@ using namespace std;
 #else
 #define deb(...)
 #endif
-
-// path: https://cses.fi/problemset/task/1070
-// path: https://codeforces.com/contest/2037/problem/B
-// path: https://atcoder.jp/contests/abc374/tasks/abc374_e
-// path: https://assesment/contests/abc374/tasks/abc374_e
-// path: https://www.spoj.com/problems/LIS2/
 
 #define int long long
 const int N = 1e6+10;
