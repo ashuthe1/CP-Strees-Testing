@@ -35,15 +35,16 @@ if [[ ! -d "$TARGET_DIR" ]]; then
   TARGET_DIR="$CODE_TRAVEL_DIR/unspecified"
 fi
 
-# Extract the path after the domain
+# Remove the domain from the path and extract subfolder and file name
 RELATIVE_PATH=$(echo "$PATH_VALUE" | sed -E 's|https?://[^/]+/||')
 
-# Replace `/` with `-` in the remaining path to create a simplified folder name
+# Replace '/' with '-' in the relative path to create a folder name
 FOLDER_NAME=$(echo "$RELATIVE_PATH" | sed 's|/|-|g')
 
-# Extract the file name:
-# - Use the last segment (after the last `/`), or if empty, use the segment before that
+# Extract the last segment for the file name. If it's empty, use the segment before it.
 LAST_SEGMENT=$(echo "$RELATIVE_PATH" | awk -F'/' '{print $NF}')
+
+# If the last segment is empty (i.e., path ends with a '/'), use the second-to-last segment.
 if [[ -z "$LAST_SEGMENT" ]]; then
   LAST_SEGMENT=$(echo "$RELATIVE_PATH" | awk -F'/' '{print $(NF-1)}')
 fi
@@ -51,14 +52,12 @@ fi
 # Replace spaces with underscores in the file name
 FILE_NAME="${LAST_SEGMENT// /_}.cpp"
 
-# Create the folder inside the target directory
+# Full path for the folder and file
 FINAL_FOLDER="$TARGET_DIR/$FOLDER_NAME"
 mkdir -p "$FINAL_FOLDER"
-
-# Full path of the new file
 NEW_FILE_PATH="$FINAL_FOLDER/$FILE_NAME"
 
-# Copy the file to the target directory and subfolder
+# Copy the file to the target directory
 cp solution.cpp "$NEW_FILE_PATH"
 
 cd ..
