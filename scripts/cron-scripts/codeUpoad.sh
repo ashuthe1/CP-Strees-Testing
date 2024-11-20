@@ -53,7 +53,7 @@ echo "Relative path (without domain): '$RELATIVE_PATH'"
 
 # Step 3: Remove the file name from the relative path to get the subfolder path
 # We are now removing the part of the URL that corresponds to the file name, so we don't keep it
-SUBFOLDER_PATH=$(echo "$RELATIVE_PATH" | sed "s|/$TEMP_FILE_NAME$||")
+SUBFOLDER_PATH=$(echo "$RELATIVE_PATH" | sed "s|/$FILE_NAME$||")
 
 # Replace spaces with underscores in the file name
 FILE_NAME="${FILE_NAME// /_}.cpp"
