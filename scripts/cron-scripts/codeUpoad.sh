@@ -9,27 +9,42 @@ REPO_DIR="../../"  # Path to the root of the Local Git repository
 cd "$SRC_DIR" || exit 1
 
 # Extract the first comment from solution.cpp
-FILE_NAME=$(grep -m 1 "//" solution.cpp | sed 's/^\/\/ *//')
+COMMENT=$(grep -m 1 "//" solution.cpp | sed 's/^\/\/ *//')
 
-# Ensure a valid filename is generated
-if [[ -z "$FILE_NAME" ]]; then
+# Ensure a valid comment is extracted
+if [[ -z "$COMMENT" ]]; then
   echo "No comment found in solution.cpp. Exiting."
   exit 1
 fi
 
-# Replace spaces with underscores in the file name
-FILE_NAME="${FILE_NAME// /_}"
+# Split the comment into words
+FIRST_WORD=$(echo "$COMMENT" | awk '{print $1}')
+SECOND_WORD=$(echo "$COMMENT" | awk '{print $2}')
 
-# Create the codeTravel directory if it doesn't exist
-mkdir -p "$CODE_TRAVEL_DIR"
+# Ensure valid words are extracted
+if [[ -z "$FIRST_WORD" || -z "$SECOND_WORD" ]]; then
+  echo "Invalid comment format in solution.cpp. Exiting."
+  exit 1
+fi
 
-# Create a new file inside the codeTravel directory
-NEW_FILE_PATH="$CODE_TRAVEL_DIR/$FILE_NAME.cpp"
+# Check if FIRST_WORD matches any folder name in CODE_TRAVEL_DIR
+TARGET_DIR="$CODE_TRAVEL_DIR/$FIRST_WORD"
+if [[ ! -d "$TARGET_DIR" ]]; then
+  TARGET_DIR="$CODE_TRAVEL_DIR/unspecified"
+fi
+
+# Replace spaces with underscores in the second word for the filename
+FILE_NAME="${SECOND_WORD// /_}.cpp"
+
+# Full path of the new file
+NEW_FILE_PATH="$TARGET_DIR/$FILE_NAME"
+
+# Create the file in the appropriate directory
 cp solution.cpp "$NEW_FILE_PATH"
 
-cd .. # move back to root of the project
+cd ..
 
 # Add the new file to git
-git add .
-git commit -m "Added $FILE_NAME.cpp from solution.cpp"
+git add "."
+git commit -m "Added $FILE_NAME from solution.cpp to $FIRST_WORD folder"
 git push origin main
