@@ -20,21 +20,21 @@ if [[ -z "$SECOND_LINE" ]]; then
   exit 1
 fi
 
-# Extract the second word from the second line
-SECOND_WORD=$(echo "$SECOND_LINE" | awk '{print $2}')
+# Extract the value after "path:" in the second line
+PATH_VALUE=$(echo "$SECOND_LINE" | sed -n 's/.*path: *\([^ ]*\).*/\1/p')
 
-# Debug print: Check what is being extracted as the second word
-echo "Extracted second word: '$SECOND_WORD'"
+# Debug print: Check the extracted path value
+echo "Extracted path value: '$PATH_VALUE'"
 
-# Ensure a valid second word is extracted
-if [[ -z "$SECOND_WORD" ]]; then
-  echo "Invalid second line format in solution.cpp. Exiting."
+# Ensure a valid path value is extracted
+if [[ -z "$PATH_VALUE" ]]; then
+  echo "No valid path value found in the second line. Exiting."
   exit 1
 fi
 
-# Split the second word into directory name and file name based on '/'
-DIR_NAME=$(echo "$SECOND_WORD" | cut -d'/' -f1)
-FILE_NAME=$(echo "$SECOND_WORD" | cut -d'/' -f2)
+# Split the path value into directory name and file name based on '/'
+DIR_NAME=$(echo "$PATH_VALUE" | cut -d'/' -f1)
+FILE_NAME=$(echo "$PATH_VALUE" | cut -d'/' -f2)
 
 # Debug print: Check the directory name and file name extracted
 echo "Extracted directory name: '$DIR_NAME'"
@@ -42,7 +42,7 @@ echo "Extracted file name: '$FILE_NAME'"
 
 # Ensure both directory name and file name are valid
 if [[ -z "$DIR_NAME" || -z "$FILE_NAME" ]]; then
-  echo "Invalid @path format in solution.cpp. Exiting."
+  echo "Invalid path value in solution.cpp. Exiting."
   exit 1
 fi
 
@@ -51,9 +51,6 @@ TARGET_DIR="$CODE_TRAVEL_DIR/$DIR_NAME"
 if [[ ! -d "$TARGET_DIR" ]]; then
   TARGET_DIR="$CODE_TRAVEL_DIR/unspecified"
 fi
-
-# Debug print: Check the target directory
-echo "Target directory: '$TARGET_DIR'"
 
 # Replace spaces with underscores in the file name
 FILE_NAME="${FILE_NAME// /_}.cpp"
