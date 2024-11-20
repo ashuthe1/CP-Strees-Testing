@@ -1,5 +1,5 @@
 // Ashutosh Gautam ツ
-// @path: codeforces/subarray_minimum
+// @path: codeforces/subarray_minimum_2
 
 #include <bits/stdc++.h>
 using namespace std;
