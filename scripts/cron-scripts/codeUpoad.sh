@@ -38,8 +38,9 @@ fi
 # Remove the domain from the path and extract subfolder and file name
 RELATIVE_PATH=$(echo "$PATH_VALUE" | sed -E 's|https?://[^/]+/||')
 
-# Extract file name (last segment of the path)
-FILE_NAME=$(echo "$RELATIVE_PATH" | awk -F'/' '{print $NF}')
+# Extract subfolder and file name
+SUBFOLDER_PATH=$(echo "$RELATIVE_PATH" | sed 's|/|-|g' | sed 's|-*$||')  # Replace slashes with dashes
+FILE_NAME=$(echo "$RELATIVE_PATH" | awk -F'/' '{print $NF}')  # Extract last part after last slash
 
 # Ensure the file name is non-empty
 if [[ -z "$FILE_NAME" ]]; then
@@ -49,11 +50,11 @@ fi
 # Replace spaces with underscores in the file name
 FILE_NAME="${FILE_NAME// /_}.cpp"
 
-# Create subfolder by removing domain, filename, and leading/trailing slashes
-SUBFOLDER_NAME=$(echo "$RELATIVE_PATH" | sed -E "s|^[^/]+/||" | sed -E "s|/$FILE_NAME||" | sed -E 's|^/||' | sed -E 's|/$||')
+# Remove the file name from the subfolder path (create the folder path without the file name)
+FOLDER_NAME=$(echo "$SUBFOLDER_PATH" | sed "s|$FILE_NAME$||" | sed 's|/$||')  # Remove file name from subfolder path
 
 # Full path for the folder and file
-FINAL_FOLDER="$TARGET_DIR/$SUBFOLDER_NAME"
+FINAL_FOLDER="$TARGET_DIR/$FOLDER_NAME"
 mkdir -p "$FINAL_FOLDER"
 NEW_FILE_PATH="$FINAL_FOLDER/$FILE_NAME"
 
@@ -64,5 +65,5 @@ cd ..
 
 # Add the new file to git
 git add "."
-git commit -m "Added $FILE_NAME from solution.cpp to $POSSIBLE_FOLDER/$SUBFOLDER_NAME folder"
+git commit -m "Added $FILE_NAME from solution.cpp to $POSSIBLE_FOLDER/$FOLDER_NAME folder"
 git push origin main
