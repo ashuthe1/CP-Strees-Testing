@@ -2,7 +2,7 @@
 
 # Set your paths
 SRC_DIR="../../src"
-CODE_TRAVEL_DIR="../codeTravel"
+CODE_TRAVEL_DIR="../code"
 REPO_DIR="../../"  # Path to the root of the Local Git repository
 
 # Navigate to the source directory
