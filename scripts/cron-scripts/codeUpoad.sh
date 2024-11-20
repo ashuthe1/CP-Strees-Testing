@@ -38,10 +38,11 @@ fi
 # Extract the path after the domain
 RELATIVE_PATH=$(echo "$PATH_VALUE" | sed -E 's|https?://[^/]+/||')
 
-# Replace '/' with '-' in the relative path to create a folder name
+# Replace `/` with `-` in the remaining path to create a simplified folder name
 FOLDER_NAME=$(echo "$RELATIVE_PATH" | sed 's|/|-|g')
 
-# Extract the last segment for the file name. If it's empty, use the segment before it.
+# Extract the file name:
+# - Use the last segment (after the last `/`), or if empty, use the segment before that
 LAST_SEGMENT=$(echo "$RELATIVE_PATH" | awk -F'/' '{print $NF}')
 if [[ -z "$LAST_SEGMENT" ]]; then
   LAST_SEGMENT=$(echo "$RELATIVE_PATH" | awk -F'/' '{print $(NF-1)}')
@@ -50,12 +51,14 @@ fi
 # Replace spaces with underscores in the file name
 FILE_NAME="${LAST_SEGMENT// /_}.cpp"
 
-# Full path for the folder and file
+# Create the folder inside the target directory
 FINAL_FOLDER="$TARGET_DIR/$FOLDER_NAME"
 mkdir -p "$FINAL_FOLDER"
+
+# Full path of the new file
 NEW_FILE_PATH="$FINAL_FOLDER/$FILE_NAME"
 
-# Copy the file to the target directory
+# Copy the file to the target directory and subfolder
 cp solution.cpp "$NEW_FILE_PATH"
 
 cd ..
