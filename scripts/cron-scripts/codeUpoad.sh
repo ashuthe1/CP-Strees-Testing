@@ -38,26 +38,29 @@ fi
 # Extract the path after the domain
 RELATIVE_PATH=$(echo "$PATH_VALUE" | sed -E 's|https?://[^/]+/||')
 
-# Extract the directory structure (everything before the last '/') and file name (after the last '/')
-SUB_FOLDER=$(dirname "$RELATIVE_PATH")
-FILE_NAME=$(basename "$RELATIVE_PATH")
+# Replace '/' with '-' in the relative path to create a folder name
+FOLDER_NAME=$(echo "$RELATIVE_PATH" | sed 's|/|-|g')
+
+# Extract the last segment for the file name. If it's empty, use the segment before it.
+LAST_SEGMENT=$(echo "$RELATIVE_PATH" | awk -F'/' '{print $NF}')
+if [[ -z "$LAST_SEGMENT" ]]; then
+  LAST_SEGMENT=$(echo "$RELATIVE_PATH" | awk -F'/' '{print $(NF-1)}')
+fi
 
 # Replace spaces with underscores in the file name
-FILE_NAME="${FILE_NAME// /_}.cpp"
+FILE_NAME="${LAST_SEGMENT// /_}.cpp"
 
-# Create the necessary subfolder structure inside the target directory
-FINAL_FOLDER="$TARGET_DIR/$SUB_FOLDER"
+# Full path for the folder and file
+FINAL_FOLDER="$TARGET_DIR/$FOLDER_NAME"
 mkdir -p "$FINAL_FOLDER"
-
-# Full path of the new file
 NEW_FILE_PATH="$FINAL_FOLDER/$FILE_NAME"
 
-# Copy the file to the target directory and subfolder
+# Copy the file to the target directory
 cp solution.cpp "$NEW_FILE_PATH"
 
 cd ..
 
 # Add the new file to git
 git add "."
-git commit -m "Added $FILE_NAME from solution.cpp to $POSSIBLE_FOLDER/$SUB_FOLDER folder"
+git commit -m "Added $FILE_NAME from solution.cpp to $POSSIBLE_FOLDER/$FOLDER_NAME folder"
 git push origin main
