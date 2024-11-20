@@ -44,10 +44,6 @@ if [[ -z "$FILE_NAME" ]]; then
   echo "File name was empty. Defaulting to 'default.cpp'."
 fi
 
-TEMP_FILE_NAME = "${FILE_NAME}"
-# Replace spaces with underscores in the file name
-FILE_NAME="${FILE_NAME// /_}.cpp"
-
 # Step 2: Remove the file name from the URL to get the folder path
 # The remaining path is the part before the file name
 RELATIVE_PATH=$(echo "$PATH_VALUE" | sed -E 's|https?://[^/]+/||')
@@ -58,6 +54,9 @@ echo "Relative path (without domain): '$RELATIVE_PATH'"
 # Step 3: Remove the file name from the relative path to get the subfolder path
 # We are now removing the part of the URL that corresponds to the file name, so we don't keep it
 SUBFOLDER_PATH=$(echo "$RELATIVE_PATH" | sed "s|/$TEMP_FILE_NAME$||")
+
+# Replace spaces with underscores in the file name
+FILE_NAME="${FILE_NAME// /_}.cpp"
 
 # Print the folder path (before converting slashes to dashes) for debugging
 echo "Subfolder path (without file name): '$SUBFOLDER_PATH'"
