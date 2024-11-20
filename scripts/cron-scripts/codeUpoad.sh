@@ -44,7 +44,7 @@ if [[ -z "$FILE_NAME" ]]; then
   echo "File name was empty. Defaulting to 'default.cpp'."
 fi
 
-TEMP_FILE_NAME = ${FILE_NAME}
+TEMP_FILE_NAME = "${FILE_NAME}"
 # Replace spaces with underscores in the file name
 FILE_NAME="${FILE_NAME// /_}.cpp"
 
