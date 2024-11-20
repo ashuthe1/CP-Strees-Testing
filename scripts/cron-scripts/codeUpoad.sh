@@ -26,7 +26,7 @@ if [[ -z "$PATH_VALUE" ]]; then
   exit 1
 fi
 
-# Extract possible folder name from the URL (e.g., "codeforces" from "https://codeforces.com")
+# Extract possible folder name from the URL (e.g., "cses" from "https://cses.fi")
 POSSIBLE_FOLDER=$(echo "$PATH_VALUE" | awk -F'/' '{print $3}' | awk -F'.' '{print $1}')
 
 # Check if POSSIBLE_FOLDER matches any folder name in CODE_TRAVEL_DIR
@@ -38,22 +38,20 @@ fi
 # Remove the domain from the path and extract subfolder and file name
 RELATIVE_PATH=$(echo "$PATH_VALUE" | sed -E 's|https?://[^/]+/||')
 
-# Replace '/' with '-' in the relative path to create a folder name
-FOLDER_NAME=$(echo "$RELATIVE_PATH" | sed 's|/|-|g')
+# Split the path into folder and file name components
+SUBFOLDER_PATH=$(echo "$RELATIVE_PATH" | sed 's|/|-|g' | sed 's|-*$||')  # Replace slashes with dashes for folder names
+FILE_NAME=$(echo "$RELATIVE_PATH" | awk -F'/' '{print $NF}')  # Extract last segment of the path
 
-# Extract the last segment for the file name. If it's empty, use the segment before it.
-LAST_SEGMENT=$(echo "$RELATIVE_PATH" | awk -F'/' '{print $NF}')
-
-# If the last segment is empty (i.e., path ends with a '/'), use the second-to-last segment.
-if [[ -z "$LAST_SEGMENT" ]]; then
-  LAST_SEGMENT=$(echo "$RELATIVE_PATH" | awk -F'/' '{print $(NF-1)}')
+# Ensure the file name is non-empty
+if [[ -z "$FILE_NAME" ]]; then
+  FILE_NAME="default"
 fi
 
 # Replace spaces with underscores in the file name
-FILE_NAME="${LAST_SEGMENT// /_}.cpp"
+FILE_NAME="${FILE_NAME// /_}.cpp"
 
 # Full path for the folder and file
-FINAL_FOLDER="$TARGET_DIR/$FOLDER_NAME"
+FINAL_FOLDER="$TARGET_DIR/$SUBFOLDER_PATH"
 mkdir -p "$FINAL_FOLDER"
 NEW_FILE_PATH="$FINAL_FOLDER/$FILE_NAME"
 
@@ -64,5 +62,5 @@ cd ..
 
 # Add the new file to git
 git add "."
-git commit -m "Added $FILE_NAME from solution.cpp to $POSSIBLE_FOLDER/$FOLDER_NAME folder"
+git commit -m "Added $FILE_NAME from solution.cpp to $POSSIBLE_FOLDER/$SUBFOLDER_PATH folder"
 git push origin main
