@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # Set your paths
-SRC_DIR="../../src"
+SRC_DIR="../src"
 CODE_TRAVEL_DIR="../code"
-REPO_DIR="../../"  # Path to the root of the Local Git repository
+REPO_DIR="../"  # Path to the root of the Local Git repository
 
 # Navigate to the source directory
 cd "$SRC_DIR" || exit 1
