@@ -38,9 +38,6 @@ if [[ -z "$FILE_NAME" ]]; then
   exit 1
 fi
 
-# Add `.cpp` to the file name
-FILE_NAME="${FILE_NAME}.cpp"
-
 # Debugging: Print the extracted file name
 echo "Extracted file name: '$FILE_NAME'"
 
@@ -56,6 +53,9 @@ mkdir -p "$FINAL_FOLDER"
 
 # Debugging: Print the final folder path
 echo "Final folder path: '$FINAL_FOLDER'"
+
+# Add `.cpp` to the file name
+FILE_NAME="${FILE_NAME}.cpp"
 
 # Full path for the new file
 NEW_FILE_PATH="$FINAL_FOLDER/$FILE_NAME"
