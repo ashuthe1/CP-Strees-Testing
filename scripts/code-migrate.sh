@@ -17,63 +17,81 @@ if [[ -z "$SECOND_LINE" ]]; then
   exit 1
 fi
 
-# Extract the value after "path:" in the second line
-PATH_VALUE=$(echo "$SECOND_LINE" | sed -n 's/.*path: *\([^ ]*\).*/\1/p')
+# Extract the value after "tag:" in the second line
+TAG_VALUE=$(echo "$SECOND_LINE" | sed -n 's/.*tag: *\([^ ]*\).*/\1/p')
 
-# Ensure a valid path value is extracted
-if [[ -z "$PATH_VALUE" ]]; then
-  echo "No valid path value found in the second line. Exiting."
+# Ensure a valid tag value is extracted
+if [[ -z "$TAG_VALUE" ]]; then
+  echo "No valid tag value found in the second line. Exiting."
   exit 1
 fi
 
-# Step 1: Extract the file name (last segment of the path, after the last "/")
-FILE_NAME=$(echo "$PATH_VALUE" | awk -F'/' '{print $NF}')
+# Debugging: Print the extracted tag value
+echo "Extracted tag value: '$TAG_VALUE'"
 
-# Ensure the file name is non-empty
-if [[ -z "$FILE_NAME" ]]; then
-  FILE_NAME="default"
-  echo "File name was empty. Defaulting to 'default.cpp'."
+# Step 1: Extract the second word (e.g., 'dp')
+SECOND_WORD=$(echo "$TAG_VALUE" | awk -F'/' '{print $2}')
+
+# Ensure the second word is non-empty
+if [[ -z "$SECOND_WORD" ]]; then
+  echo "Second word could not be extracted. Exiting."
+  exit 1
 fi
 
-# Step 2: Remove the file name from the URL to get the folder path
-RELATIVE_PATH=$(echo "$PATH_VALUE" | sed -E 's|https?://[^/]+/||')
+# Step 2: Extract the last word before the final '/'
+LAST_WORD=$(echo "$TAG_VALUE" | awk -F'/' '{print $NF}')
 
-# Step 3: Remove the file name from the relative path to get the subfolder path
-SUBFOLDER_PATH=$(echo "$RELATIVE_PATH" | sed "s|/$FILE_NAME$||")
+# Ensure the last word is non-empty
+if [[ -z "$LAST_WORD" ]]; then
+  echo "Last word could not be extracted. Exiting."
+  exit 1
+fi
 
-# Replace spaces with underscores in the file name
-FILE_NAME="${FILE_NAME// /_}.cpp"
+# Step 3: Combine second word and last word for the file name
+FILE_NAME="${SECOND_WORD}_${LAST_WORD}.cpp"
 
-# Step 4: Replace slashes with dashes for the folder name
+# Debugging: Print the extracted file name
+echo "Extracted file name: '$FILE_NAME'"
+
+# Step 4: Extract the subfolder structure by removing the last segment
+SUBFOLDER_PATH=$(echo "$TAG_VALUE" | sed "s|/$LAST_WORD$||")
+
+# Debugging: Print the subfolder path
+echo "Subfolder path: '$SUBFOLDER_PATH'"
+
+# Step 5: Replace slashes with dashes for the folder name
 FOLDER_NAME=$(echo "$SUBFOLDER_PATH" | sed 's|/|-|g')
 
-# Step 5: Extract the main folder (e.g., "codeforces", "cses", etc.) from the URL
-POSSIBLE_FOLDER=$(echo "$PATH_VALUE" | awk -F'/' '{print $3}' | awk -F'.' '{print $1}')
+# Debugging: Print the folder name
+echo "Final folder name (slashes replaced with dashes): '$FOLDER_NAME'"
 
 # Step 6: Check if the folder exists in the CODE_TRAVEL_DIR
-TARGET_DIR="$CODE_TRAVEL_DIR/$POSSIBLE_FOLDER"
+TARGET_DIR="$CODE_TRAVEL_DIR"
 if [[ ! -d "$TARGET_DIR" ]]; then
-  TARGET_DIR="$CODE_TRAVEL_DIR/unspecified"
-  echo "Folder '$POSSIBLE_FOLDER' not found. Using 'unspecified' folder."
+  echo "Target directory '$TARGET_DIR' not found. Exiting."
+  exit 1
 fi
 
 # Step 7: Create the folder structure and the file path
 FINAL_FOLDER="$TARGET_DIR/$FOLDER_NAME"
 mkdir -p "$FINAL_FOLDER"
 
+# Debugging: Print the final folder path
+echo "Final folder path: '$FINAL_FOLDER'"
+
 # Full path for the new file
 NEW_FILE_PATH="$FINAL_FOLDER/$FILE_NAME"
 
-# Print the final file path for debugging
+# Debugging: Print the final file path
 echo "Final file path: '$NEW_FILE_PATH'"
 
 # Step 8: Copy the solution.cpp to the new file location
 cp solution.cpp "$NEW_FILE_PATH"
 
 # Navigate back to the repository directory
-cd ..
+cd "$REPO_DIR" || exit 1
 
 # Step 9: Add the new file to git and commit the changes
 git add "."
-git commit -m "Added $FILE_NAME from solution.cpp to $POSSIBLE_FOLDER/$FOLDER_NAME folder"
+git commit -m "Added $FILE_NAME from solution.cpp to $FOLDER_NAME folder"
 git push origin main
