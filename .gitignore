@@ -7,7 +7,7 @@ tests/input/*
 tests/actual_output/*
 tests/expected_output/*
 
-src/exec/*
+code/exec/*
 
 # Exclude .gitkeep files from being ignored
 !logs/.gitkeep
@@ -16,5 +16,5 @@ src/exec/*
 !tests/input/.gitkeep
 !tests/actual_output/.gitkeep
 !tests/expected_output/.gitkeep
-!src/exec/.gitkeep
+!code/exec/.gitkeep
 !migrations/.gitkeep

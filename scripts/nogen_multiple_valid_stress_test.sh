@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Compile solution and validator with error checking
-g++ ../src/solution.cpp -o ../src/exec/solution || { echo "Failed to compile solution.cpp"; exit 1; }
-g++ ../src/anypossible_validator.cpp -o ../src/exec/validator || { echo "Failed to compile validator.cpp"; exit 1; }
+g++ ../code/solution.cpp -o ../code/exec/solution || { echo "Failed to compile solution.cpp"; exit 1; }
+g++ ../code/anypossible_validator.cpp -o ../code/exec/validator || { echo "Failed to compile validator.cpp"; exit 1; }
 
 # Clean up previous logs while preserving .gitkeep files
 echo "Cleaning up previous logs..."
@@ -35,10 +35,10 @@ for input in ../tests/input/*.txt; do
     > "$test_log"
 
     # Run solution and save actual output
-    ../src/exec/solution < "$input" > "$actual_output" || { echo "Failed to generate actual output"; exit 1; }
+    ../code/exec/solution < "$input" > "$actual_output" || { echo "Failed to generate actual output"; exit 1; }
 
     # Validate output with anypossible_validator
-    if ../src/exec/validator "$input" "$actual_output" | tee -a "$checker_log" | grep -q "Valid"; then
+    if ../code/exec/validator "$input" "$actual_output" | tee -a "$checker_log" | grep -q "Valid"; then
         # Log success details
         echo "Test $test_name: PASSED" >> "$test_log"
         echo "Input:" >> "$test_log"

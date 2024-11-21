@@ -1,10 +1,10 @@
 #!/bin/bash
 
 # Compile all necessary programs with error checking
-g++ ../src/solution.cpp -o ../src/exec/solution || { echo "Failed to compile solution.cpp"; exit 1; }
-g++ ../src/bruteforce.cpp -o ../src/exec/bruteforce || { echo "Failed to compile bruteforce.cpp"; exit 1; }
-g++ ../src/test_gen.cpp -o ../src/exec/test_gen || { echo "Failed to compile test_gen.cpp"; exit 1; }
-g++ ../src/checker.cpp -o ../src/exec/checker || { echo "Failed to compile checker.cpp"; exit 1; }
+g++ ../code/solution.cpp -o ../code/exec/solution || { echo "Failed to compile solution.cpp"; exit 1; }
+g++ ../code/bruteforce.cpp -o ../code/exec/bruteforce || { echo "Failed to compile bruteforce.cpp"; exit 1; }
+g++ ../code/test_gen.cpp -o ../code/exec/test_gen || { echo "Failed to compile test_gen.cpp"; exit 1; }
+g++ ../code/checker.cpp -o ../code/exec/checker || { echo "Failed to compile checker.cpp"; exit 1; }
 
 # Clean up previous logs and test files while preserving .gitkeep files
 echo "Cleaning up previous logs and test files..."
@@ -18,7 +18,7 @@ echo "Cleanup complete."
 num_tests=${1:-10}  # Use the first argument if provided, otherwise default to 10
 
 # Generate test cases
-../src/exec/test_gen "$num_tests" || { echo "Failed to generate test cases"; exit 1; }
+../code/exec/test_gen "$num_tests" || { echo "Failed to generate test cases"; exit 1; }
 
 # Create logs directory and subdirectories for checker logs and test logs if they don't exist
 mkdir -p ../logs/checker_logs
@@ -46,13 +46,13 @@ for input in ../tests/input/*.txt; do
     > "$checker_log"
 
     # Generate expected output using bruteforce solution
-    ../src/exec/bruteforce < "$input" > "$expected_output" || { echo "Failed to generate expected output"; exit 1; }
+    ../code/exec/bruteforce < "$input" > "$expected_output" || { echo "Failed to generate expected output"; exit 1; }
 
     # Run solution and save actual output
-    ../src/exec/solution < "$input" > "$actual_output" || { echo "Failed to generate actual output"; exit 1; }
+    ../code/exec/solution < "$input" > "$actual_output" || { echo "Failed to generate actual output"; exit 1; }
 
     # Compare outputs and log details
-    if ../src/exec/checker "$actual_output" "$expected_output" | tee -a "$checker_log" | grep -q "Mismatch"; then
+    if ../code/exec/checker "$actual_output" "$expected_output" | tee -a "$checker_log" | grep -q "Mismatch"; then
         # Log details for a failing test case
         echo "Test $test_name: FAILED" >> "$log_file"
         echo "Input:" >> "$log_file"

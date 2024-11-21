@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Set your paths
-SRC_DIR="/home/ashuthe1/cp/src"
+SRC_DIR="/home/ashuthe1/cp/code"
 CODE_TRAVEL_DIR="/home/ashuthe1/cp/code-migrations"
 REPO_DIR="/home/ashuthe1/cp"  # Path to the root of the Local Git repository
 

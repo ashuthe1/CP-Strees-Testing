@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # Compile solution, validator, and test generator with error checking
-g++ ../src/solution.cpp -o ../src/exec/solution || { echo "Failed to compile solution.cpp"; exit 1; }
-g++ ../src/anypossible_validator.cpp -o ../src/exec/validator || { echo "Failed to compile validator.cpp"; exit 1; }
-g++ ../src/test_gen.cpp -o ../src/exec/test_gen || { echo "Failed to compile test_gen.cpp"; exit 1; }
+g++ ../code/solution.cpp -o ../code/exec/solution || { echo "Failed to compile solution.cpp"; exit 1; }
+g++ ../code/anypossible_validator.cpp -o ../code/exec/validator || { echo "Failed to compile validator.cpp"; exit 1; }
+g++ ../code/test_gen.cpp -o ../code/exec/test_gen || { echo "Failed to compile test_gen.cpp"; exit 1; }
 
 # Clean up previous logs and test files while preserving .gitkeep files
 echo "Cleaning up previous logs and test files..."
@@ -16,7 +16,7 @@ echo "Cleanup complete."
 num_tests=${1:-10}  # Use the first argument if provided, otherwise default to 10
 
 # Generate test cases with the specified number
-../src/exec/test_gen "$num_tests" || { echo "Failed to generate test cases"; exit 1; }
+../code/exec/test_gen "$num_tests" || { echo "Failed to generate test cases"; exit 1; }
 
 # Define color codes for terminal output
 GREEN='\033[0;32m'
@@ -43,10 +43,10 @@ for input in ../tests/input/*.txt; do
     > "$test_log"
 
     # Run solution and save actual output
-    ../src/exec/solution < "$input" > "$actual_output" || { echo "Failed to generate actual output"; exit 1; }
+    ../code/exec/solution < "$input" > "$actual_output" || { echo "Failed to generate actual output"; exit 1; }
 
     # Validate output with anypossible_validator
-    if ../src/exec/validator "$input" "$actual_output" | tee -a "$checker_log" | grep -q "Valid"; then
+    if ../code/exec/validator "$input" "$actual_output" | tee -a "$checker_log" | grep -q "Valid"; then
         # Log success details
         echo "Test $test_name: PASSED" >> "$test_log"
         echo "Input:" >> "$test_log"
