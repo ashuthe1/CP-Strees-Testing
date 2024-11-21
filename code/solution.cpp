@@ -1,5 +1,5 @@
 // Ashutosh Gautam ツ
-// path: usaco/digit_dp
+// path: codechef/digit_dp
 #include <bits/stdc++.h>
 using namespace std;
 
