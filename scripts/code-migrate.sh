@@ -2,7 +2,7 @@
 
 # Set your paths
 SRC_DIR="/home/ashuthe1/cp/code"
-CODE_TRAVEL_DIR="/home/ashuthe1/cp/code-migrations"
+CODE_TRAVEL_DIR="/home/ashuthe1/cp/migrations/codes"
 REPO_DIR="/home/ashuthe1/cp"  # Path to the root of the Local Git repository
 
 # Navigate to the source directory

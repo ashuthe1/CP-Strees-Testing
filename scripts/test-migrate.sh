@@ -3,7 +3,8 @@
 # Define the source directories and the target history directory
 LOGS_DIR="../logs"
 TESTS_DIR="../tests"
-MIGRATION_DIR="../migrations"
+MIGRATION_DIR="../migrations/stress-tests"
+CODE_FILE="../code/solution.cpp"
 
 # Define color codes for terminal output
 CYAN='\033[0;36m'
@@ -29,6 +30,9 @@ fi
 timestamp=$(date +"%Y%m%d_%H%M%S")
 migration_dir="$MIGRATION_DIR/migration_$timestamp"
 mkdir -p "$migration_dir"
+
+
+cp "$CODE_FILE" "$migration_dir/" 2>/dev/null
 
 # Copy logs to the migration directory
 echo -e "Migrating logs..."
