@@ -1,22 +1,19 @@
 // Ashutosh Gautam ツ
-// path: https://cses.fi/problemset/task/1138
+// path: https://atcoder.jp/contests/abc353/tasks/abc353_g
 #include <bits/stdc++.h>
 using namespace std;
- 
+
 #ifdef AshutoshOS // It works on my machine.
 #include "../algo/debug.hpp" 
 #else
 #define deb(...)
 #endif
- 
+
 #define int long long
-const int N = 2e5+10;
+const int N = 1e6+10;
 const int INF = 1e16;
 const int MOD = 1e9+7;
- 
-int n, q;
-vector<int> adj[N], val, subSize, dfsArray, pathSum, indexx;
- 
+
 struct node {
     int val = 0;
     node(){}
@@ -24,7 +21,7 @@ struct node {
         this->val = val;
     }
     void merge(const node &leftChild, const node &rightChild) { 
-        val = leftChild.val + rightChild.val;
+        val = max(leftChild.val, rightChild.val);
     }
 };
 struct update {
@@ -34,14 +31,14 @@ struct update {
         this->pending = val; 
     }
     void combine(update &newUpdate, const int &tl, const int &tr) {
-        pending += newUpdate.pending; 
+        pending = newUpdate.pending; 
     }
     // store the correct information in the node x
     void apply(node &cur, const int &tl, const int &tr){
         cur.val += (tr - tl + 1) * pending;  // Adding value v in range from L to R
     }
 };
- 
+
 // template<typename node,typename update>
 struct lazySegmentTree {
     int len;
@@ -77,7 +74,7 @@ struct lazySegmentTree {
         }
         upd.apply(segTree[idx], tl, tr);
     }
- 
+
     template<typename T>
     void build(const T &arr, const int &idx, const int &tl, const int &tr) {
         if(tl == tr) {
@@ -116,7 +113,7 @@ struct lazySegmentTree {
         rangeUpdate((idx << 1) | 1, tm + 1, tr, l, r, upd);
         segTree[idx].merge(segTree[idx<<1], segTree[(idx << 1) | 1]);
     }
- 
+
     public:
     template<typename T> void build(const T &arr) {
         build(arr, 1, 0, len-1);
@@ -128,62 +125,34 @@ struct lazySegmentTree {
         rangeUpdate(1, 0, len - 1, l, r, upd);
     }
 };
- 
-void dfs(int node, int par, int sum) {
-    dfsArray.push_back(node);
-    indexx[node] = dfsArray.size() - 1;
-    subSize[node] = 1;
-    int curSum = sum + val[node];
-    pathSum.push_back(curSum);
-    for(int child: adj[node]) {
-        if(child == par) continue;
-        dfs(child, node, curSum);
-        subSize[node] += subSize[child];
-    }
-}
- 
 void AshutoshGautam() {
-    cin >> n >> q;
-    val.resize(n+1);
-    subSize.resize(n+1, 0);
-    indexx.resize(n+1, 0);
-    for(int i = 1; i <= n; i++) cin >> val[i];
-    for(int i = 0; i < n-1; i++) {
-        int u, v; cin >> u >> v;
-        adj[u].push_back(v);
-        adj[v].push_back(u);
-    }
- 
-    dfs(1, 1, 0);
-    deb(dfsArray, subSize, pathSum, indexx)
- 
-    lazySegmentTree st(n+1);
-    st.build(pathSum);
- 
-    while(q--) {
-        int type; cin >> type;
-        if(type == 1) {
-            int node, newVal; cin >> node >> newVal;
-            int diff = - (val[node] - newVal);
-            val[node] = newVal;
-            int subNodes = subSize[node];
-            int l = indexx[node], r = l + subNodes - 1;
-            deb(l, r, diff);
-            st.rangeUpdate(l, r, diff);
-        } else {
-            int node; cin >> node;
-            int idx = indexx[node];
-            deb(idx);
-            cout << st.query(idx, idx).val << "\n";
-        }
-    }
+    int n, c, m, ans = -INF; cin >> n >> c >> m;
+    vector<int> arr(n+1, -INF);
+    lazySegmentTree left(n+1), right(n+1);
+    left.build(arr); right.build(arr);
+
+    left.rangeUpdate(1, 1, c);
+    right.rangeUpdate(1, 1, -c);
+    vector<pair<int, int>> v(m);
+    for(auto &e: v) cin >> e.first >> e.second;
+
+    for(int i = m-1; i >= 0; i--) {
+        int t = v[i].first, p = v[i].second;
+        int lq = left.query(0, t).val, rq = right.query(t, n).val;
+        ans = max({ans, p - c*t + lq, p + c*t + rq});
+        left.rangeUpdate(t, t, ans + c*t);
+        right.rangeUpdate(t, t, ans - c*t);
+    } 
+    cout << ans << endl;
+
 }
- 
+
 signed main() {
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
     int testCases = 1;
     // cin >> testCases; 
- 
+
     for(int testCase = 1; testCase <= testCases ; testCase++)  
         AshutoshGautam(); // Ping me for solving any issue ツ
     return 0;
+}

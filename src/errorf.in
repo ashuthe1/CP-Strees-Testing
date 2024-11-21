@@ -1,8 +1,0 @@
-Line 62: subSize = [0, 6, 5, 1, 1, 2, 1]; 
-Line 65: i = 1; subChild[i] = [{5, 2}]; 
-Line 65: i = 2; subChild[i] = [{2, 5}, {1, 6}, {1, 4}]; 
-Line 65: i = 3; subChild[i] = []; 
-Line 65: i = 4; subChild[i] = []; 
-Line 65: i = 5; subChild[i] = [{1, 3}]; 
-Line 65: i = 6; subChild[i] = []; 
-Line 90: total = 0; depth = [0, 1, 2, 4, 3, 3, 3]; 
