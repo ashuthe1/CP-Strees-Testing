@@ -29,51 +29,29 @@ fi
 # Debugging: Print the extracted tag value
 echo "Extracted tag value: '$TAG_VALUE'"
 
-# Step 1: Extract the second word (e.g., 'dp')
-SECOND_WORD=$(echo "$TAG_VALUE" | awk -F'/' '{print $2}')
+# Step 1: Extract the last word after the last '/'
+FILE_NAME=$(echo "$TAG_VALUE" | awk -F'/' '{print $NF}')
 
-# Ensure the second word is non-empty
-if [[ -z "$SECOND_WORD" ]]; then
-  echo "Second word could not be extracted. Exiting."
+# Ensure the file name is non-empty
+if [[ -z "$FILE_NAME" ]]; then
+  echo "File name could not be extracted. Exiting."
   exit 1
 fi
 
-# Step 2: Extract the last word before the final '/'
-LAST_WORD=$(echo "$TAG_VALUE" | awk -F'/' '{print $NF}')
-
-# Ensure the last word is non-empty
-if [[ -z "$LAST_WORD" ]]; then
-  echo "Last word could not be extracted. Exiting."
-  exit 1
-fi
-
-# Step 3: Combine second word and last word for the file name
-FILE_NAME="${SECOND_WORD}_${LAST_WORD}.cpp"
+# Add `.cpp` to the file name
+FILE_NAME="${FILE_NAME}.cpp"
 
 # Debugging: Print the extracted file name
 echo "Extracted file name: '$FILE_NAME'"
 
-# Step 4: Extract the subfolder structure by removing the last segment
-SUBFOLDER_PATH=$(echo "$TAG_VALUE" | sed "s|/$LAST_WORD$||")
+# Step 2: Extract the folder structure (everything before the last '/')
+FOLDER_STRUCTURE=$(echo "$TAG_VALUE" | sed "s|/$FILE_NAME||")
 
-# Debugging: Print the subfolder path
-echo "Subfolder path: '$SUBFOLDER_PATH'"
+# Debugging: Print the folder structure
+echo "Folder structure: '$FOLDER_STRUCTURE'"
 
-# Step 5: Replace slashes with dashes for the folder name
-FOLDER_NAME=$(echo "$SUBFOLDER_PATH" | sed 's|/|-|g')
-
-# Debugging: Print the folder name
-echo "Final folder name (slashes replaced with dashes): '$FOLDER_NAME'"
-
-# Step 6: Check if the folder exists in the CODE_TRAVEL_DIR
-TARGET_DIR="$CODE_TRAVEL_DIR"
-if [[ ! -d "$TARGET_DIR" ]]; then
-  echo "Target directory '$TARGET_DIR' not found. Exiting."
-  exit 1
-fi
-
-# Step 7: Create the folder structure and the file path
-FINAL_FOLDER="$TARGET_DIR/$FOLDER_NAME"
+# Step 3: Create the nested folder structure inside the target directory
+FINAL_FOLDER="$CODE_TRAVEL_DIR/$FOLDER_STRUCTURE"
 mkdir -p "$FINAL_FOLDER"
 
 # Debugging: Print the final folder path
@@ -85,13 +63,13 @@ NEW_FILE_PATH="$FINAL_FOLDER/$FILE_NAME"
 # Debugging: Print the final file path
 echo "Final file path: '$NEW_FILE_PATH'"
 
-# Step 8: Copy the solution.cpp to the new file location
+# Step 4: Copy the solution.cpp to the new file location
 cp solution.cpp "$NEW_FILE_PATH"
 
 # Navigate back to the repository directory
 cd "$REPO_DIR" || exit 1
 
-# Step 9: Add the new file to git and commit the changes
+# Step 5: Add the new file to git and commit the changes
 git add "."
-git commit -m "Added $FILE_NAME from solution.cpp to $FOLDER_NAME folder"
+git commit -m "Added $FILE_NAME from solution.cpp to $FOLDER_STRUCTURE folder"
 git push origin main
