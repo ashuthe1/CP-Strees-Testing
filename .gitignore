@@ -1,7 +1,7 @@
 # Ignore logs and tests sub-directories
 logs/checker_logs/*
 logs/test_logs/*
-migrations/*
+migrations/stress-tests*
 
 tests/input/*
 tests/actual_output/*
