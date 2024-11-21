@@ -9,92 +9,51 @@ using namespace std;
 #endif
 
 #define int long long
-const int N = 3010;
+const int N = 1e6+10;
 const int INF = 1e16;
 const int MOD = 1e9+7;
 
-vector<int> adj[N], subSize, papa, depth;
-vector<pair<int, int>> subChild[N];
-vector<bool> jammed;
-void init(int n) {
-    for(int i = 1; i <= n; i++) {
-        adj[i].clear();
-        subChild[i].clear();
+string decToBinary(int n)
+{
+    string ans = "";
+    for (int i = 31; i >= 0; i--) {
+        int k = n >> i;
+        if (k & 1)
+            ans += "1";
+        else
+            ans += "0";
     }
-    depth.clear();
-    depth.resize(n+1, 0);
-    papa.clear();
-    papa.resize(n+1, 0);
-    jammed.clear();
-    jammed.resize(n+1, false);
-    subSize.clear();
-    subSize.resize(n+1, 0);
-}
-
-void dfs(int node, int par) {
-    papa[node] = par;
-    subSize[node] = 1;
-    depth[node] = depth[par] + 1;
-    for(int &child: adj[node]) {
-        if(child == par) continue;
-        dfs(child, node);
-        subSize[node] += subSize[child];
-        subChild[node].push_back({subSize[child], child});
+    string hehe = "";
+    bool gotOne = false;
+    for(auto &e: ans) {
+        if(e == '1') gotOne = true;
+        if(gotOne) hehe += e;
     }
-
+    return hehe;
 }
 void AshutoshGautam() {
-    int n, k; cin >> n >> k;
-    init(n);
-
-    if(n == 1) {
-        cout << "1\n";
-        return;
-    }
-
-    for(int i = 0; i < n-1; i++) {
-        int u, v; cin >> u >> v;
-        adj[u].push_back(v);
-        adj[v].push_back(u);
-    }
-    depth[0] = 0;
-    dfs(1, 0);
-    deb(subSize);
-    for(int i = 1; i <= n; i++) {
-        sort(subChild[i].begin(), subChild[i].end(), greater<pair<int, int>>());
-        deb(i, subChild[i])
-    }
-
-    int rem = k-1, total = 0;
-    vector<pair<int, int>> possibleSubtree;
-    int curNode = n;
-    while(curNode != 1) {
-        int par = papa[curNode];
-        for(auto &e: subChild[par]) {
-            int child = e.second;
-            if(child == curNode) continue;
-            possibleSubtree.push_back({e.first, e.second});
-            total += e.first;
+    int l, r, ans = 0; cin >> l >> r;
+    for(int num = l; num <= r; num++) {
+        string s = decToBinary(num);
+        set<int> st;
+        int cnt = 1;
+        char prev = s[0];
+        s += '&';
+        for(int i = 1; i <= n; i++) {
+            if(s[i] != prev) {
+                mp[cnt]++;
+                cnt = 1;
+            } else cnt++;
         }
-        curNode = par;
+        if(st.size() == 1) ans++;
     }
-    sort(possibleSubtree.begin(), possibleSubtree.end(), greater<pair<int, int>>());
-    // deb(possibleSubtree)
-    int idx = 0, sz = possibleSubtree.size();
-    while(rem && idx < sz) {
-        int node = possibleSubtree[idx].second;
-        total -= possibleSubtree[idx].first;
-        rem--;
-        idx++;
-    }
-    deb(total, depth);
-    cout << total + depth[n] << "\n";
+    cout << ans << "\n";
 }
 
 signed main() {
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
     int testCases = 1;
-    cin >> testCases; 
+    // cin >> testCases; 
 
     for(int testCase = 1; testCase <= testCases ; testCase++)  
         AshutoshGautam(); // Ping me for solving any issue ツ
