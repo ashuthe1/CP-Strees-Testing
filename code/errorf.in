@@ -1,0 +1,6 @@
+Line 62: subSize = [0, 5, 1, 2, 1, 1]; 
+Line 65: i = 1; subChild[i] = [{2, 3}, {1, 5}, {1, 4}]; 
+Line 65: i = 2; subChild[i] = []; 
+Line 65: i = 3; subChild[i] = [{1, 2}]; 
+Line 65: i = 4; subChild[i] = []; 
+Line 65: i = 5; subChild[i] = []; 
