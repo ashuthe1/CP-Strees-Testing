@@ -1,6 +1,8 @@
 // Ashutosh Gautam ツ
 // tag: implementation/bad_implementation_example
 // links: https://codeforces.com/contest/2030/problem/D
+// wasn't able to implement the solution even after 2 hrs, got idea in 30 mins, to check min/max of each segment, but it't too complicated
+
 #include <bits/stdc++.h>
 using namespace std;
 
