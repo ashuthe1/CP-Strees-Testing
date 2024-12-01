@@ -1,102 +1,130 @@
-// Ashutosh Gautam ツ
-#include <bits/stdc++.h>
-using namespace std;
+/*
+  Compete against Yourself.
+  Author - Aryan (@aryanc403)
+*/
+/*
+  Credits -
+  Atcoder library - https://atcoder.github.io/ac-library/production/document_en/ (namespace atcoder)
+  Github source code of library - https://github.com/atcoder/ac-library/tree/master/atcoder
+  https://codeforces.com/contest/4/submission/150120627
+*/
 
-#ifdef AshutoshOS // It works on my machine.
-#include "../algo/debug.hpp" 
+#ifdef ARYANC403
+    #include <header.h>
 #else
-#define deb(...)
+    #pragma GCC optimize ("Ofast")
+    // #pragma GCC target ("sse,sse2,sse3,ssse3,sse4,popcnt,abm,mmx")
+    #pragma GCC target ("sse,sse2,mmx")
+    #pragma GCC optimize ("-ffloat-store")
+    #include <bits/stdc++.h>
+    #include <ext/pb_ds/assoc_container.hpp>
+    #include <ext/pb_ds/tree_policy.hpp>
+    #define dbg(args...) 42;
+    #define endl "\n"
 #endif
 
-#define int long long
-const int N = 3010;
-const int INF = 1e16;
-const int MOD = 1e9+7;
+// y_combinator from @neal template https://codeforces.com/contest/1553/submission/123849801
+// http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0200r0.html
+template<class Fun> class y_combinator_result {
+    Fun fun_;
+public:
+    template<class T> explicit y_combinator_result(T &&fun): fun_(std::forward<T>(fun)) {}
+    template<class ...Args> decltype(auto) operator()(Args &&...args) { return fun_(std::ref(*this), std::forward<Args>(args)...); }
+};
+template<class Fun> decltype(auto) y_combinator(Fun &&fun) { return y_combinator_result<std::decay_t<Fun>>(std::forward<Fun>(fun)); }
 
-vector<int> adj[N], subSize, papa, depth;
-vector<pair<int, int>> subChild[N];
-vector<bool> jammed;
-void init(int n) {
-    for(int i = 1; i <= n; i++) {
-        adj[i].clear();
-        subChild[i].clear();
-    }
-    depth.clear();
-    depth.resize(n+1, 0);
-    papa.clear();
-    papa.resize(n+1, 0);
-    jammed.clear();
-    jammed.resize(n+1, false);
-    subSize.clear();
-    subSize.resize(n+1, 0);
+using namespace std;
+#define fo(i,n)   for(i=0;i<(n);++i)
+#define repA(i,j,n)   for(i=(j);i<=(n);++i)
+#define repD(i,j,n)   for(i=(j);i>=(n);--i)
+#define all(x) begin(x), end(x)
+#define sz(x) ((lli)(x).size())
+#define eb emplace_back
+#define X first
+#define Y second
+
+using lli = long long int;
+using mytype = long double;
+using ii = pair<lli,lli>;
+using vii = vector<ii>;
+using vi = vector<lli>;
+
+template <class T>
+using ordered_set =  __gnu_pbds::tree<T,__gnu_pbds::null_type,less<T>,__gnu_pbds::rb_tree_tag,__gnu_pbds::tree_order_statistics_node_update>;
+// X.find_by_order(k) return kth element. 0 indexed.
+// X.order_of_key(k) returns count of elements strictly less than k.
+
+// namespace Re = std::ranges;
+// namespace Ve = std::ranges::views;
+
+const auto start_time = std::chrono::high_resolution_clock::now();
+void aryanc403()
+{
+auto end_time = std::chrono::high_resolution_clock::now();
+std::chrono::duration<double> diff = end_time-start_time;
+    cerr<<"Time Taken : "<<diff.count()<<"\n";
 }
 
-void dfs(int node, int par) {
-    papa[node] = par;
-    subSize[node] = 1;
-    depth[node] = depth[par] + 1;
-    for(int &child: adj[node]) {
-        if(child == par) continue;
-        dfs(child, node);
-        subSize[node] += subSize[child];
-        subChild[node].push_back({subSize[child], child});
-    }
+const lli INF = 0xFFFFFFFFFFFFFFFLL;
+const lli SEED=chrono::steady_clock::now().time_since_epoch().count();
+mt19937_64 rng(SEED);
+inline lli rnd(lli l=0,lli r=INF)
+{return uniform_int_distribution<lli>(l,r)(rng);}
 
+class CMP
+{public:
+bool operator()(ii a , ii b) //For min priority_queue .
+{    return ! ( a.X < b.X || ( a.X==b.X && a.Y <= b.Y ));   }};
+
+void add( map<lli,lli> &m, lli x,lli cnt=1)
+{
+    auto jt=m.find(x);
+    if(jt==m.end())         m.insert({x,cnt});
+    else                    jt->Y+=cnt;
 }
-void AshutoshGautam() {
-    int n, k; cin >> n >> k;
-    init(n);
 
-    if(n == 1) {
-        cout << "1\n";
-        return;
-    }
+void del( map<lli,lli> &m, lli x,lli cnt=1)
+{
+    auto jt=m.find(x);
+    if(jt->Y<=cnt)            m.erase(jt);
+    else                      jt->Y-=cnt;
+}
 
-    for(int i = 0; i < n-1; i++) {
-        int u, v; cin >> u >> v;
-        adj[u].push_back(v);
-        adj[v].push_back(u);
-    }
-    depth[0] = 0;
-    dfs(1, 0);
-    deb(subSize);
-    for(int i = 1; i <= n; i++) {
-        sort(subChild[i].begin(), subChild[i].end(), greater<pair<int, int>>());
-        deb(i, subChild[i])
-    }
+bool cmp(const ii &a,const ii &b)
+{
+    return a.X<b.X||(a.X==b.X&&a.Y<b.Y);
+}
 
-    int rem = k-1, total = 0;
-    vector<pair<int, int>> possibleSubtree;
-    int curNode = n;
-    while(curNode != 1) {
-        int par = papa[curNode];
-        for(auto &e: subChild[par]) {
-            int child = e.second;
-            if(child == curNode) continue;
-            possibleSubtree.push_back({e.first, e.second});
-            total += e.first;
+int main(void) {
+    ios_base::sync_with_stdio(false);cin.tie(NULL);
+    // freopen("txt.in", "r", stdin);
+    // freopen("txt.out", "w", stdout);
+// cout<<std::fixed<<std::setprecision(35);
+// Ve::iota(1, 6) | Ve::transform([](int x) { return x * 2; }) | Ve::reverse | Ve::take(3)
+lli T=1;
+cin>>T;
+while(T--)
+{
+    lli n,m,k;
+    cin>>n>>m>>k;
+    string s;
+    cin>>s;
+    lli cnt = 0,ans=0,upto=-1;
+    for(lli i=0;i<n;i++){
+        cerr << cnt << " " << upto << " " << ans << "\n";
+        if(s[i]=='1'||i<=upto){
+            cnt=0;
+            continue;
         }
-        curNode = par;
+        cnt++;
+        if(cnt==m){
+            ans++;
+            upto=i+k-1;
+            cnt=0;
+            continue;
+        }
     }
-    sort(possibleSubtree.begin(), possibleSubtree.end(), greater<pair<int, int>>());
-    // deb(possibleSubtree)
-    int idx = 0, sz = possibleSubtree.size();
-    while(rem && idx < sz) {
-        int node = possibleSubtree[idx].second;
-        total -= possibleSubtree[idx].first;
-        rem--;
-        idx++;
-    }
-    deb(total, depth);
-    cout << total + depth[n] << "\n";
-}
-
-signed main() {
-    ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
-    int testCases = 1;
-    cin >> testCases; 
-
-    for(int testCase = 1; testCase <= testCases ; testCase++)  
-        AshutoshGautam(); // Ping me for solving any issue ツ
+    cout<<ans<<endl;
+}   aryanc403();
     return 0;
 }
