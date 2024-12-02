@@ -1,19 +1,23 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+const int N = 25;
 string generate_test() {
     int n = rand() % 20 + 1;  // Number of integers between 1 and 100
-    int m = rand() % n + 1;
-    int k = rand() % n + 1;
-
-    if(m >= n) m = n-1;
-    if(k >= ) k = n-1;
+    int q = rand() % 12 + 1;
 
     stringstream ss;
-    ss << n << " " << m << " " << k << "\n";
+    ss << n << " " << q << "\n";
     for(int i = 0; i < n; i++) {
-        int x = rand() % 2;
+        int x = rand() % N + 1;
         ss << x;
+        if(i < n-1) ss << " ";
+    }
+    ss << "\n";
+    for(int i = 0; i < q; i++) {
+        int t = rand()%2 + 1, l = rand()%n + 1, r = rand()%n + 1;
+        if(l > r) swap(l, r);
+        ss << t << " " << l << " " << r << "\n";
     }
     ss << "\n";
     return ss.str();

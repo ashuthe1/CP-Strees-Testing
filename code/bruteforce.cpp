@@ -1,130 +1,174 @@
-/*
-  Compete against Yourself.
-  Author - Aryan (@aryanc403)
-*/
-/*
-  Credits -
-  Atcoder library - https://atcoder.github.io/ac-library/production/document_en/ (namespace atcoder)
-  Github source code of library - https://github.com/atcoder/ac-library/tree/master/atcoder
-  https://codeforces.com/contest/4/submission/150120627
-*/
-
-#ifdef ARYANC403
-    #include <header.h>
-#else
-    #pragma GCC optimize ("Ofast")
-    // #pragma GCC target ("sse,sse2,sse3,ssse3,sse4,popcnt,abm,mmx")
-    #pragma GCC target ("sse,sse2,mmx")
-    #pragma GCC optimize ("-ffloat-store")
-    #include <bits/stdc++.h>
-    #include <ext/pb_ds/assoc_container.hpp>
-    #include <ext/pb_ds/tree_policy.hpp>
-    #define dbg(args...) 42;
-    #define endl "\n"
-#endif
-
-// y_combinator from @neal template https://codeforces.com/contest/1553/submission/123849801
-// http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0200r0.html
-template<class Fun> class y_combinator_result {
-    Fun fun_;
-public:
-    template<class T> explicit y_combinator_result(T &&fun): fun_(std::forward<T>(fun)) {}
-    template<class ...Args> decltype(auto) operator()(Args &&...args) { return fun_(std::ref(*this), std::forward<Args>(args)...); }
-};
-template<class Fun> decltype(auto) y_combinator(Fun &&fun) { return y_combinator_result<std::decay_t<Fun>>(std::forward<Fun>(fun)); }
-
-using namespace std;
-#define fo(i,n)   for(i=0;i<(n);++i)
-#define repA(i,j,n)   for(i=(j);i<=(n);++i)
-#define repD(i,j,n)   for(i=(j);i>=(n);--i)
+#include <bits/stdc++.h>
+ 
+#define range(it, a, b) for (ll it = a; it < b; it++)
 #define all(x) begin(x), end(x)
-#define sz(x) ((lli)(x).size())
-#define eb emplace_back
-#define X first
-#define Y second
-
-using lli = long long int;
-using mytype = long double;
-using ii = pair<lli,lli>;
-using vii = vector<ii>;
-using vi = vector<lli>;
-
-template <class T>
-using ordered_set =  __gnu_pbds::tree<T,__gnu_pbds::null_type,less<T>,__gnu_pbds::rb_tree_tag,__gnu_pbds::tree_order_statistics_node_update>;
-// X.find_by_order(k) return kth element. 0 indexed.
-// X.order_of_key(k) returns count of elements strictly less than k.
-
-// namespace Re = std::ranges;
-// namespace Ve = std::ranges::views;
-
-const auto start_time = std::chrono::high_resolution_clock::now();
-void aryanc403()
-{
-auto end_time = std::chrono::high_resolution_clock::now();
-std::chrono::duration<double> diff = end_time-start_time;
-    cerr<<"Time Taken : "<<diff.count()<<"\n";
+#define ll long long
+#define ull unsigned long long
+#define INF64 ((ll) 1 << 62)
+#define INF32 (1 << 30)
+#define mset multiset
+#define uset unordered_set
+#define umap unordered_map 
+#define pqueue priority_queue 
+#define ptr(A) shared_ptr<A>
+ 
+using namespace std;
+ 
+void setio (string name) {
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+    if (name.size()) {
+        freopen((name + ".in").c_str(), "r", stdin);
+        freopen((name + ".out").c_str(), "w", stdout);
+    }
 }
-
-const lli INF = 0xFFFFFFFFFFFFFFFLL;
-const lli SEED=chrono::steady_clock::now().time_since_epoch().count();
-mt19937_64 rng(SEED);
-inline lli rnd(lli l=0,lli r=INF)
-{return uniform_int_distribution<lli>(l,r)(rng);}
-
-class CMP
-{public:
-bool operator()(ii a , ii b) //For min priority_queue .
-{    return ! ( a.X < b.X || ( a.X==b.X && a.Y <= b.Y ));   }};
-
-void add( map<lli,lli> &m, lli x,lli cnt=1)
-{
-    auto jt=m.find(x);
-    if(jt==m.end())         m.insert({x,cnt});
-    else                    jt->Y+=cnt;
-}
-
-void del( map<lli,lli> &m, lli x,lli cnt=1)
-{
-    auto jt=m.find(x);
-    if(jt->Y<=cnt)            m.erase(jt);
-    else                      jt->Y-=cnt;
-}
-
-bool cmp(const ii &a,const ii &b)
-{
-    return a.X<b.X||(a.X==b.X&&a.Y<b.Y);
-}
-
-int main(void) {
-    ios_base::sync_with_stdio(false);cin.tie(NULL);
-    // freopen("txt.in", "r", stdin);
-    // freopen("txt.out", "w", stdout);
-// cout<<std::fixed<<std::setprecision(35);
-// Ve::iota(1, 6) | Ve::transform([](int x) { return x * 2; }) | Ve::reverse | Ve::take(3)
-lli T=1;
-cin>>T;
-while(T--)
-{
-    lli n,m,k;
-    cin>>n>>m>>k;
-    string s;
-    cin>>s;
-    lli cnt = 0,ans=0,upto=-1;
-    for(lli i=0;i<n;i++){
-        cerr << cnt << " " << upto << " " << ans << "\n";
-        if(s[i]=='1'||i<=upto){
-            cnt=0;
-            continue;
+ 
+struct SegTree {
+    struct Node {
+        Node* left;
+        Node* right;
+        ll lazy, cnt = 0;
+        ll l, r, m, sum;     
+        ll size() { return r-l+1; }   
+    };
+ 
+    Node* root;
+    vector<ll>& arr;
+ 
+    SegTree(vector<ll>& a) : arr(a) {
+        root = new Node;
+        root->l = 0;
+        root->r = a.size()-1;
+        root->m = root->r/2;
+        build(root);
+    }
+ 
+    void build(Node* node) {
+        if (node->l == node->r) {
+            node->sum = arr[node->l];
+            return;
         }
-        cnt++;
-        if(cnt==m){
-            ans++;
-            upto=i+k-1;
-            cnt=0;
-            continue;
+ 
+        node->left = new Node;
+        node->left->l = node->l;
+        node->left->r = node->m;
+        node->left->m = (node->left->l+node->left->r)/2;
+        build(node->left);
+ 
+        node->right = new Node;
+        node->right->l = node->m+1;
+        node->right->r = node->r;
+        node->right->m = (node->right->l+node->right->r)/2;
+        build(node->right);
+ 
+        node->sum = node->left->sum + node->right->sum;
+    }
+ 
+    ll f(ll n, ll k) {
+        return (n*(n-1))/2 + n*k;
+    }
+ 
+    void push(Node* node) {
+        if (node->cnt) {
+            ll k = node->lazy - (node->cnt*((node->size()*(node->size()-1))/2));
+            k /= node->size();
+ 
+            ll ans_l = node->cnt*(node->left->size()*(node->left->size()-1)/2) + k*node->left->size();
+            node->left->sum += ans_l;
+            node->left->lazy += ans_l;
+            node->left->cnt += node->cnt;
+ 
+            ll ans_r = node->lazy - ans_l;
+            node->right->sum += ans_r;
+            node->right->lazy += ans_r;
+            node->right->cnt += node->cnt;
+ 
+            node->lazy = 0;
+            node->cnt = 0;
         }
     }
-    cout<<ans<<endl;
-}   aryanc403();
-    return 0;
+ 
+    void update(Node* node, ll l, ll r, ll from) {
+        if (node->l == l && node->r == r) {
+            node->sum += f(node->size(), from);
+            node->lazy += f(node->size(), from);
+            node->cnt++;
+            return;
+        }
+ 
+        push(node);
+        if (l <= node->m) 
+            update(node->left, l, min(r, node->m), from);
+        if (node->m < r)
+            update(node->right, max(l, node->m+1), r, from+(max(l, node->m+1)-l));
+        node->sum = node->left->sum + node->right->sum;
+    }
+ 
+    void update(ll l, ll r) { update (root, l, r, 1); }
+ 
+    ll query(Node* node, ll l, ll r) {
+        if (node->l == l && node->r == r)
+            return node->sum;
+        
+        push(node);
+        ll ans = 0;
+        if (l <= node->m)
+            ans += query(node->left, l, min(r, node->m));
+        if (node->m < r)
+            ans += query(node->right, max(l, node->m+1), r);
+        return ans;
+    }
+ 
+    ll query(ll l, ll r) { return query(root, l, r); }
+};
+ 
+ll n, q;
+vector<ll> arr;
+ 
+void solve() {
+    cin >> n >> q;
+    arr.resize(n);
+ 
+    range(i, 0, n)
+        cin >> arr[i];
+    SegTree st (arr);
+ 
+    ll t, l, r;
+    while (q--) {
+        cin >> t;
+        if (t == 1) {
+            cin >> l >> r;
+            l--; r--;
+            st.update(l, r);
+            continue;
+        }
+        cin >> l >> r;
+        l--; r--;
+        cout << st.query(l, r) << '\n';
+    }
 }
+ 
+int main () {
+    setio("");
+    ll t = 1; 
+    // cin >> t;
+    while (t--) solve();
+}
+ 
+// IT'S TOUGH, I KNOW
+// BUT YOU'D RATHER DIE FIGHTING THAN LIVE ON YOUR KNEES
+// THOUG H YOU WON'T DO NEITHER OF THOSE
+// IMPOSSIBLE, AS IT'S AGAINST YOUR NATURE
+// AS YOU ALREADY WON
+// I SEE YOUR MEDAL HANGING FROM YOUR NECK
+// SHINING AS NOTHING YOU'VE EVER HAD
+ 
+// THOUSANDS AND THOUSANDS OF LINES
+// YOU AREADY MADE IT THIS FAR
+// AND WHO COULD TELL HOW FAR YOU WILL GET...
+// BUT YOU?
+ 
+// THEN COME ON, YOU BASTARD!
+// GO CLEAR YOUR MIND AND STAND
+// AS EACH OF THOSE LINES IS A STEP CLOSER
+// CLOSER TO THE GREATNESS YOU PURSUE
