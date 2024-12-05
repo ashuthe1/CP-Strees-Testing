@@ -1,29 +1,61 @@
-// Ashutosh Gautam
-#include <bits/stdc++.h>
+// C++ implementation for the above approach
+
+#include <iostream>
 using namespace std;
+long long convertToBase9(long long n)
+{
+    long long ans = 0;
 
-#ifdef AshutoshOS // It works on my machine.
-#include "../algo/debug.hpp" 
-#else
-#define deb(...)
-#endif
+    // Denotes the digit place
+    long long a = 1;
 
-#define int long long
-const int N = 1e6+10;
-const int INF = 1e16;
-const int MOD = 1e9+7;
-
-void AshutoshGautam() {
-    int a, b; cin >> a >> b;
-    cout << (a^b) << "\n";
+    // Method to convert any number
+    // to binary equivalent
+    while (n > 0) {
+        ans += (a * (n % 9));
+        a *= 10;
+        n /= 9;
+    }
+    return ans;
 }
 
-signed main() {
-    ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
-    int testCases = 1;
-    cin >> testCases; 
+long long getNthnumber(long long base9, long long K)
+{
+    long long ans = 0;
 
-    for(int testCase = 1; testCase <= testCases ; testCase++)  
-        AshutoshGautam(); // Ping me for solving any issue
+    // denotes the current digits place
+    long long a = 1;
+    while (base9 > 0) {
+        int cur = base9 % 10;
+
+        // If current digit is >= K
+        // increment its value by 1
+        if (cur >= K) {
+            ans += a * (cur + 1);
+        }
+
+        // Else add the digit as it is
+        else {
+            ans += a * cur;
+        }
+        base9 /= 10;
+
+        // Move to the next digit
+        a *= 10;
+    }
+    return ans;
+}
+
+// Driver code
+int main()
+{
+    int t; cin >> t;
+    while(t--) {
+        long long N = 12, K = 2;
+        cin >> N;
+        K = 4;
+        long long base9 = convertToBase9(N);
+        cout << getNthnumber(base9, K) << "\n";
+    }
     return 0;
 }
