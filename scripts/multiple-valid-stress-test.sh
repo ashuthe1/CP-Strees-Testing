@@ -1,9 +1,10 @@
 #!/bin/bash
+source .env
 
 # Compile solution, validator, and test generator with error checking
-g++ ../code/solution.cpp -o ../code/exec/solution || { echo "Failed to compile solution.cpp"; exit 1; }
-g++ ../code/anypossible_validator.cpp -o ../code/exec/validator || { echo "Failed to compile validator.cpp"; exit 1; }
-g++ ../code/test_gen.cpp -o ../code/exec/test_gen || { echo "Failed to compile test_gen.cpp"; exit 1; }
+$GCC_VERSION ../code/solution.cpp -o ../code/exec/solution || { echo "Failed to compile solution.cpp"; exit 1; }
+$GCC_VERSION ../code/anypossible_validator.cpp -o ../code/exec/validator || { echo "Failed to compile validator.cpp"; exit 1; }
+$GCC_VERSION ../code/test_gen.cpp -o ../code/exec/test_gen || { echo "Failed to compile test_gen.cpp"; exit 1; }
 
 # Clean up previous logs and test files while preserving .gitkeep files
 echo "Cleaning up previous logs and test files..."

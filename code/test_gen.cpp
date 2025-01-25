@@ -3,17 +3,13 @@ using namespace std;
 
 const int maxN = 100;
 string generate_test() {
-    int n = rand()%maxN + 1;  // Number of integers between 1 and 100
+    int x = rand()%maxN + 1;  // Number of integers between 1 and 100
+    int y = rand()%maxN + 1;
     // int k = rand()%n;
     // if(k == 0) k++;
     stringstream ss;
     // ss << n << " " << k << "\n";
-    ss << "1";
-    for(int i = 1; i < n; i++) {
-        int cur = rand()%2;
-        ss << cur;
-        // if(i != n-1) ss << " ";
-    }
+    ss << x << " " << y << "\n";
     return ss.str();
 }
 

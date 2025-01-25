@@ -1,8 +1,9 @@
 #!/bin/bash
+source .env
 
 # Compile solution and validator with error checking
-g++ ../code/solution.cpp -o ../code/exec/solution || { echo "Failed to compile solution.cpp"; exit 1; }
-g++ ../code/anypossible_validator.cpp -o ../code/exec/validator || { echo "Failed to compile validator.cpp"; exit 1; }
+$GCC_VERSION ../code/solution.cpp -o ../code/exec/solution || { echo "Failed to compile solution.cpp"; exit 1; }
+$GCC_VERSION ../code/anypossible_validator.cpp -o ../code/exec/validator || { echo "Failed to compile validator.cpp"; exit 1; }
 
 # Clean up previous logs while preserving .gitkeep files
 echo "Cleaning up previous logs..."

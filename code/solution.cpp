@@ -2,6 +2,14 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+#include<ext/pb_ds/assoc_container.hpp>
+#include<ext/pb_ds/tree_policy.hpp>
+using namespace __gnu_pbds;
+
+template<class T> using IndexedSet = tree<T, null_type,less_equal<T>,rb_tree_tag,tree_order_statistics_node_update>;
+// st.find_by_order(k)  returns iterator to kth element starting from 0;
+// st.order_of_key(k) returns count of elements strictly smaller than k;
+
 #ifdef AshutoshOS // It works on my machine.
 #include "../algo/debug.hpp" 
 #else
@@ -14,9 +22,10 @@ const int INF = 1e16;
 const int MOD = 1e9+7;
 
 void AshutoshGautam() {
-    string s; cin >> s;
-    deb(s)
-    cout << "Hello " << s;
+    int x, y; cin >> x >> y;
+    int sum = x + y;
+    // if(sum < 100) sum++;
+    cout << sum << "\n";
 }
 
 signed main() {
