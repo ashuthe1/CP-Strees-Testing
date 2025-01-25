@@ -1,16 +1,18 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-const int T = 1e4;
-const int maxK = 1e12;
+const int maxN = 100;
 string generate_test() {
-    int t = rand()% T + 1;  // Number of integers between 1 and 100
-
+    int n = rand()%maxN + 1;  // Number of integers between 1 and 100
+    // int k = rand()%n;
+    // if(k == 0) k++;
     stringstream ss;
-    ss << t << "\n";
-    for(int i = 0; i < t; i++) {
-        int k = rand() % maxK + 1;
-        ss << k << "\n";
+    // ss << n << " " << k << "\n";
+    ss << "1";
+    for(int i = 1; i < n; i++) {
+        int cur = rand()%2;
+        ss << cur;
+        // if(i != n-1) ss << " ";
     }
     return ss.str();
 }

@@ -1,6 +1,23 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+string xorOfString(string s, string x) {
+    int n = s.size(), m = x.size();
+    string ans = "";
+    int dif = n - m, i = 0;
+    while(i < dif) {
+        ans += s[i];
+        i++;
+    }
+
+    for( ; i < n; i++) {
+        if(s[i] != x[i - dif]) ans += '1';
+        else ans += '0';
+    }
+
+    return ans;
+}
+
 // Function to trim whitespace from both ends of a string
 string trim(const string &str) {
     size_t first = str.find_first_not_of(" \n\r\t");
@@ -21,8 +38,31 @@ int main(int argc, char* argv[]) {
         return 1;
     }
     
-    int x;
-    input_file >> x;  // Read the target sum
+    string s; input_file >> s;
+
+    int n = s.size(), len;
+    vector<pair<string, pair<int, int>>> v;
+    for(int i = 0; i < n; i++) {
+        string cur = "";
+        for(int j = i; j < n; j++) {
+            cur += s[j];
+            v.push_back({cur, {i+1, j+1}});
+        }
+    }
+
+    string maxXor = "";
+    // int l = 1, r = 1;
+    len = v.size();
+    for(int i = 0; i < len; i++) {
+        string curXor = xorOfString(s, v[i].first);
+        if(curXor > maxXor) {
+            maxXor = curXor;
+            // l = v[i].second.first;
+            // r = v[i].second.second;
+        }
+    }
+    // int x;
+    // input_file >> x;  // Read the target sum
     input_file.close();
 
     // Open output file and validate the solution output
@@ -32,38 +72,19 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    int noOfNumbers;
-    output_file >> noOfNumbers;  // Read the number of numbers provided
-    if (noOfNumbers <= 0) {
-        cout << "Invalid: Number of values should be positive\n";
+    int l1, r1, l, r;
+    output_file >> l1 >> r1 >> l >> r;
+
+    string cur = "";
+    cur = s.substr(l-1, r - l + 1);
+
+    string curXor = xorOfString(s, cur);
+    if(curXor != maxXor) {
+        cout << "Wrong Aswer\n";
+        cout << "Exp: " << maxXor << "\n";
+        cout << "Got: " << curXor << "\n";
         return 1;
     }
-
-    vector<int> numbers;
-    int sum = 0;
-
-    for (int i = 0; i < noOfNumbers; i++) {
-        int num;
-        if (!(output_file >> num)) {  // Read each number
-            cout << "Invalid: Insufficient numbers provided\n";
-            return 1;
-        }
-        numbers.push_back(num);
-        sum += num;
-    }
-
-    // Check if sum matches x
-    if (sum != x) {
-        cout << "Invalid: Sum mismatch. Expected sum " << x << ", got " << sum << "\n";
-        return 1;
-    }
-
-    // // Check for extra output beyond the expected numbers
-    // string remaining;
-    // if (getline(output_file, remaining) && !trim(remaining).empty()) {
-    //     cout << "Invalid: Extra output found after expected numbers\n";
-    //     return 1;
-    // }
 
     cout << "Valid\n";  // Output is valid if all checks pass
     return 0;
