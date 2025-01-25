@@ -1,0 +1,33 @@
+<snippet>
+  <content><![CDATA[
+vector<int> isPrime(N, true), loPrime(N, 1), hiPrime(N, 1), primes;
+void primeSeive() {
+    isPrime[0] = isPrime[1] = false;
+    for(int i = 2; i < N; i++) {
+        if(!isPrime[i]) continue;
+        loPrime[i] = hiPrime[i] = i;
+        primes.push_back(i);
+        for(int j = 2*i; j < N; j += i) { // we can optimize this loop if loPrime/hiPrimes are not required
+            isPrime[j] = false;
+            if(loPrime[j] == 1) loPrime[j] = i;
+            hiPrime[j] = i;
+        }
+    }
+}
+vector<pair<int, int>> primeFactors(int num) {
+    vector<pair<int, int>> factors;
+    int cur = num;
+    while(cur > 1) {
+        int lp = loPrime[cur];
+        int cnt = 0;
+        while(cur%lp == 0) cur /= lp, cnt++;
+        factors.push_back({lp, cnt}); // stores {prime, cnt} for each prime
+    }
+    return factors;
+}
+]]></content>
+  <tabTrigger>primeSeive</tabTrigger>
+  <description>primeSeive</description>
+  <!-- Optional: Set a scope to limit where the snippet will trigger -->
+  <!-- <scope >source.python</scope > -->
+</snippet>

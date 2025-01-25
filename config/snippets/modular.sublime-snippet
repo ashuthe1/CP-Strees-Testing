@@ -1,0 +1,28 @@
+<snippet>
+  <content><![CDATA[
+long long binpow(long long a, long long b, long long m = MOD) {
+    a %= m;
+    long long res = 1;
+    while (b > 0) {
+        if (b & 1)
+            res = res * a % m;
+        a = a * a % m;
+        b >>= 1;
+    }
+    return res;
+}
+int mul(int a, int b) {
+    return ((a % MOD) * (b % MOD)) % MOD;
+}
+int add(int a, int b) {
+    return ((a % MOD) + (b % MOD)) % MOD;
+}
+int sub(int a, int b) {
+    return (a % MOD - b % MOD + MOD) % MOD;
+}
+]]></content>
+  <tabTrigger>modular</tabTrigger>
+  <description>Modular Arithmetic</description>
+  <!-- Optional: Set a scope to limit where the snippet will trigger -->
+  <!-- <scope >source.python</scope > -->
+</snippet>
