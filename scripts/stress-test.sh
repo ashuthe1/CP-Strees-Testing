@@ -1,10 +1,11 @@
 #!/bin/bash
+source .env
 
 # Compile all necessary programs with error checking
-g++ ../code/solution.cpp -o ../code/exec/solution || { echo "Failed to compile solution.cpp"; exit 1; }
-g++ ../code/bruteforce.cpp -o ../code/exec/bruteforce || { echo "Failed to compile bruteforce.cpp"; exit 1; }
-g++ ../code/test_gen.cpp -o ../code/exec/test_gen || { echo "Failed to compile test_gen.cpp"; exit 1; }
-g++ ../code/checker.cpp -o ../code/exec/checker || { echo "Failed to compile checker.cpp"; exit 1; }
+$GCC_VERSION ../code/solution.cpp -o ../code/exec/solution || { echo "Failed to compile solution.cpp"; exit 1; }
+$GCC_VERSION ../code/bruteforce.cpp -o ../code/exec/bruteforce || { echo "Failed to compile bruteforce.cpp"; exit 1; }
+$GCC_VERSION ../code/test_gen.cpp -o ../code/exec/test_gen || { echo "Failed to compile test_gen.cpp"; exit 1; }
+$GCC_VERSION ../code/checker.cpp -o ../code/exec/checker || { echo "Failed to compile checker.cpp"; exit 1; }
 
 # Clean up previous logs and test files while preserving .gitkeep files
 echo "Cleaning up previous logs and test files..."

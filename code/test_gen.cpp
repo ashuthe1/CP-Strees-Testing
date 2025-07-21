@@ -1,21 +1,41 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+<<<<<<< HEAD
 const int maxN = 300;
 const int maxV = 1e9;
 string generate_test() {
     int n = rand()%maxN + 1;
+=======
+const int maxN = 100000, maxM = 100000;
+const int maxVal = 10000000;
+string generate_test() {
+    int n = rand()%maxN + 1;  // Number of integers between 1 and 100
+    int m = rand()%maxN + 1;
+>>>>>>> b46894dac8abad38ee97bf93025db05a00383850
     // int k = rand()%n;
     // if(k == 0) k++;
     if(n < 3) n = 10;
     stringstream ss;
+<<<<<<< HEAD
     ss << n << "\n";
     // ss << "1";
     for(int i = 0; i < n; i++) {
         int cur = rand()%maxV + 1;
         ss << cur;
         if(i != n-1) ss << " ";
+=======
+    // ss << n << " " << k << "\n";
+    ss << n << " " << m << "\n";
+    for(int i = 0; i < n; i++) {
+        ss << rand()%maxVal + 1 << " ";
+>>>>>>> b46894dac8abad38ee97bf93025db05a00383850
     }
+    ss << "\n";
+    for(int i = 0; i < m; i++) {
+        ss << rand()%maxVal + 1 << " ";
+    }
+    ss << "\n";
     return ss.str();
 }
 

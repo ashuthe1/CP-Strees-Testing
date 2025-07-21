@@ -1,8 +1,9 @@
 #!/bin/bash
+source .env
 
 # Compile necessary programs with error checking
-g++ ../code/solution.cpp -o ../code/exec/solution || { echo "Failed to compile solution.cpp"; exit 1; }
-g++ ../code/checker.cpp -o ../code/exec/checker || { echo "Failed to compile checker.cpp"; exit 1; }
+$GCC_VERSION ../code/solution.cpp -o ../code/exec/solution || { echo "Failed to compile solution.cpp"; exit 1; }
+$GCC_VERSION ../code/checker.cpp -o ../code/exec/checker || { echo "Failed to compile checker.cpp"; exit 1; }
 
 # Create logs directory and subdirectories for checker logs and test logs if they don't exist
 mkdir -p ../logs/checker_logs
