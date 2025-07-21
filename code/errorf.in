@@ -1,1 +1,10 @@
-Line 18: s = Ashutosh; 
+Line 49: pathMin = 20; foundPathMin = 32; 
+Line 58: midCost = 20; isOk = 1; 
+Line 49: pathMin = 30; foundPathMin = 32; 
+Line 58: midCost = 30; isOk = 1; 
+Line 49: pathMin = 35; foundPathMin = 32; 
+Line 58: midCost = 35; isOk = 0; 
+Line 49: pathMin = 32; foundPathMin = 32; 
+Line 58: midCost = 32; isOk = 1; 
+Line 49: pathMin = 33; foundPathMin = 32; 
+Line 58: midCost = 33; isOk = 0; 
